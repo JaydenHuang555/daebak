@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.jay.daebak'
+version = '1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+}
+
+dependencies {
+    implementation 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+}
+dependencies {
+    implementation  'com.google.code.gson:gson:2.11.0'
+}
