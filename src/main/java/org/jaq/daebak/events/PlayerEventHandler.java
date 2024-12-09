@@ -1,5 +1,6 @@
 package org.jaq.daebak.events;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,12 +17,16 @@ public class PlayerEventHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
+        Bukkit.getLogger().info("found player");
         Global.addClient(event.getPlayer());
         Client client = Global.tryToGet(event.getPlayer());
 
-        client.spawnAt(Constants.spawnPointLocation);
+   //     client.spawnAt(Constants.spawnPointLocation);
         client.sendMessage("welcome to this server");
-        
+        Bukkit.getLogger().info(String.format("adding %s as client", client.getPlayer().name()));
+
+        Global.getBank().addAccount(client);
+
     }
 
     @EventHandler

@@ -11,7 +11,7 @@ import org.jaq.daebak.client.Client;
 public class BankApp extends App  {
 
     public BankApp(Client client) {
-        super(client, new ItemStack(BankAppConstants.material), BankAppConstants.name);
+        super(client, new ItemStack(BankAppConstants.MATERIAL), BankAppConstants.NAME);
 
     }
 

@@ -11,10 +11,10 @@ import java.util.HashMap;
 
 public class Global {
     public final static OrderedList<Client> clients = new OrderedList<>();
-    public final static HashTable<Player, Client> clientMap = new HashTable<>();
+    public final static HashMap<Player, Client> clientMap = new HashMap<>();
     public final static Bank bank = new Bank();
 
-    public final static boolean isWin = System.getProperty("os name").contains("win");
+    // public final static boolean isWin = System.getProperty("os name").contains("win");
 
     public static void addClient(@NotNull Player player){
         Client client = new Client(player);
@@ -23,7 +23,7 @@ public class Global {
     }
 
     public static Client tryToGet(@NotNull Player key){
-        if(!clientMap.contains(key)) return new Client(null);
+        if(!clientMap.containsKey(key)) return new Client(null);
         return clientMap.get(key);
     }
 
@@ -31,8 +31,8 @@ public class Global {
         return bank;
     }
 
-    public static boolean isWindows(){
+    /* public static boolean isWindows(){
         return isWin;
-    }
+    } */
 
 }

@@ -1,6 +1,7 @@
 package org.jaq.daebak.bank;
 
 import com.google.gson.Gson;
+import org.bukkit.Bukkit;
 import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
 import org.jaq.daebak.client.Money;
@@ -8,6 +9,7 @@ import org.jaq.util.HashTable;
 import org.jaq.util.OrderedList;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
@@ -38,11 +40,11 @@ public final class Bank {
 
     }
 
-    private final HashTable<Client, BankAccount> accounts = new HashTable<>();
+    private final HashMap<Client, BankAccount> accounts = new HashMap<>();
     private final OrderedList<BankAccount> accountsList = new OrderedList<>();
 
     public Bank(){
-
+        new PeriodicThread().start();
     }
 
     private void put(@NotNull Client client){
@@ -56,7 +58,7 @@ public final class Bank {
     }
 
     public void deposit(@NotNull Client client, double amount) throws Exception{
-        if(amount < client.getStats().money.amount) throw new Exception(String.format("unable to deposit money for client %s", client.getPlayer().name()));
+        if(amount > client.getStats().money.amount) throw new Exception(String.format("unable to deposit money for client %s", client.getPlayer().name()));
         client.getStats().money.amount -= amount;
         accounts.get(client).bankMoney.amount += amount;
     }
@@ -81,20 +83,23 @@ public final class Bank {
 
     public void flush(){
         try {
-            String firstCommand = Global.isWindows() ? "powershell -Command rm -bank.json" : "rm -rf bank.json";
-            String secondCommand = Global.isWindows() ? "powershell -Command mv bank.json.bp bank.json" : "mv bank.json.bp bank.json";
+            // String firstCommand = Global.isWindows() ? "powershell -Command rm -bank.json" : "rm -rf bank.json";
+            // String secondCommand = Global.isWindows() ? "powershell -Command mv bank.json.bp bank.json" : "mv bank.json.bp bank.json";
+
+            String firstCommand = "rm -rf bank.json";
+            String secondCommand = "mv bank.json.bp bank.json";
+
             PrintWriter writer = new PrintWriter("bank.json.bp");
             Gson gson = new Gson();
             for(int i = 0; i < accountsList.getSize(); i++) gson.toJson(accountsList.get(i), writer);
             writer.flush();
             writer.close();
 
-            Process process = Runtime.getRuntime().exec(firstCommand);
             if(Runtime.getRuntime().exec(firstCommand).exitValue() != 0) throw new Exception();
             if(Runtime.getRuntime().exec(secondCommand).exitValue() != 0) throw new Exception();
 
         } catch (Exception e){
-            System.err.println(e);
+            Bukkit.getLogger().warning(e.toString());
         }
     }
 

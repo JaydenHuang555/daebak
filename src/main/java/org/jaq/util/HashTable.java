@@ -5,7 +5,7 @@ public class HashTable<K, V> {
     private final int CAP = 1028;
 
     private final int hash(Object obj){
-        return obj.hashCode() << 4;
+        return (obj.hashCode() << 4) % CAP;
     }
 
     public HashTable(){

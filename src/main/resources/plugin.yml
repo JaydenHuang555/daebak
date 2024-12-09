@@ -1,0 +1,16 @@
+name: Dabebak
+version: '1.0-SNAPSHOT'
+main: org.jaq.daebak.Daebak
+api-version: '1.21.3'
+authors: [jaq]
+description: Korean GTA
+
+commands:
+  deposit:
+    description: deposits arg[0] amount of money
+    #usage: /deposit <amount>
+  display:
+    description: displays shit
+    usage: /display
+  withdraw:
+    description: withdraws arg[0] amount of money

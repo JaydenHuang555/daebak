@@ -13,7 +13,7 @@ import org.jaq.daebak.client.Client;
 public class StatusApp extends App  {
 
     public StatusApp(Client client) {
-        super(client, new ItemStack(Constants.StatusAppConstants.material), Constants.StatusAppConstants.name);
+        super(client, new ItemStack(Constants.StatusAppConstants.MATERIAL), Constants.StatusAppConstants.NAME);
     }
 
     private ItemStack buildBook(){

@@ -8,13 +8,14 @@ import org.jaq.daebak.Constants;
 import org.jaq.daebak.client.app.App;
 import org.jaq.daebak.client.app.BankApp;
 import org.jaq.daebak.client.app.StatusApp;
+import org.jaq.util.OrderedList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 public class ClientPhone {
     private final Inventory inventory;
-    private final ArrayList<App> apps = new ArrayList<>();
+    private final OrderedList<App> apps = new OrderedList<>();
     private Client client;
 
     private void registerDefaultApps(){
@@ -28,8 +29,7 @@ public class ClientPhone {
         inventory = Bukkit.createInventory(null, InventoryType.HOPPER, Constants.ClientPhoneConstants.title);
     }
 
-    public void addApp(App app){
-        inventory.addItem(app.getItemStack());
+    public void addApp(@NotNull App app){
         apps.add(app);
     }
 
@@ -42,6 +42,7 @@ public class ClientPhone {
     }
 
     public void display(@NotNull Client client){
+        for(int i = 0; i < apps.getSize(); i++) inventory.addItem(apps.get(i).getItemStack());
         client.openInventory(inventory);
     }
 
