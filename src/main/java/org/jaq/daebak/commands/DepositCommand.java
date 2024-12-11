@@ -8,7 +8,7 @@ import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
 import org.jetbrains.annotations.NotNull;
 
-public class DepositCommand implements CommandExecutor {
+public class DepositCommand extends CommandTemplate implements CommandExecutor {
     public DepositCommand(){
 
     }
@@ -34,4 +34,13 @@ public class DepositCommand implements CommandExecutor {
         return "deposit";
     }
 
+    @Override
+    public String description() {
+        return "deposits x amount of money into the bank";
+    }
+
+    @Override
+    public String usage() {
+        return "/deposit <amount>";
+    }
 }

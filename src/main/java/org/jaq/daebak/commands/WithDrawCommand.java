@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
 
-public class WithDrawCommand implements CommandExecutor {
+public class WithDrawCommand extends CommandTemplate implements CommandExecutor {
     public WithDrawCommand(){}
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String args[]){
@@ -29,4 +29,13 @@ public class WithDrawCommand implements CommandExecutor {
         return "withdraw";
     }
 
+    @Override
+    public String description() {
+        return "withdraws x money from bank";
+    }
+
+    @Override
+    public String usage() {
+        return "/withdraw <amount>";
+    }
 }

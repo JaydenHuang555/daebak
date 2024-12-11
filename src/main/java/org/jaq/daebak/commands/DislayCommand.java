@@ -8,7 +8,7 @@ import org.jaq.daebak.Constants;
 import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
 
-public class DislayCommand implements CommandExecutor {
+public class DislayCommand extends CommandTemplate implements CommandExecutor {
     public DislayCommand(){}
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String args[]){
@@ -27,4 +27,13 @@ public class DislayCommand implements CommandExecutor {
         return "display";
     }
 
+    @Override
+    public String description() {
+        return "displays money in bank and personal";
+    }
+
+    @Override
+    public String usage() {
+        return "/display";
+    }
 }

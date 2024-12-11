@@ -1,6 +1,7 @@
 package org.jaq.daebak;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jaq.daebak.commands.DepositCommand;
@@ -27,7 +28,7 @@ public final class Daebak extends JavaPlugin {
     /*TODO: add checks for valid command */
     private void initCommands(){
         for(int i = 0; i < Constants.commands.getSize(); i++){
-            getCommand(Constants.commands.get(i).toString()).setExecutor(Constants.commands.get(i));
+            getCommand(Constants.commands.get(i).toString()).setExecutor((CommandExecutor) Constants.commands.get(i));
         }
     }
 
@@ -38,13 +39,13 @@ public final class Daebak extends JavaPlugin {
         initCommands();
 
         for(int i = 0; i < AdminConstants.adminNames.getSize(); i++)
-            writeCommand(AdminConstants.adminNames.get(i));
+            writeCommand(String.format("op %s", AdminConstants.adminNames.get(i)));
 
     }
 
     @Override
     public void onDisable() {
         Global.getBank().flush();
-        Bukkit.getLogger().info("disabling plugin");
+        Global.log("disabling plugin");
     }
 }

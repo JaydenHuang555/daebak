@@ -4,16 +4,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
-import org.jaq.daebak.commands.DepositCommand;
-import org.jaq.daebak.commands.DislayCommand;
-import org.jaq.daebak.commands.WithDrawCommand;
+import org.jaq.daebak.commands.*;
 import org.jaq.util.OrderedList;
 
 import java.io.File;
 
 public final class Constants {
     public static Location spawnPointLocation = new Location(Bukkit.getWorld(""), 0.0, 0.0, 0.0);
-    public final static OrderedList<CommandExecutor> commands = new OrderedList<>();
+    public final static OrderedList<CommandTemplate> commands = new OrderedList<>();
 
     public final static String currencySymbol = "₩";
 
@@ -21,6 +19,7 @@ public final class Constants {
         commands.add(new DepositCommand());
         commands.add(new DislayCommand());
         commands.add(new WithDrawCommand());
+        commands.add(new HelpCommand());
     }
 
     public final class AdminConstants {

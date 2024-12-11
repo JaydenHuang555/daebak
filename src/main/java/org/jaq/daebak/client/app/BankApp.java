@@ -40,37 +40,18 @@ public class BankApp extends App  implements Listener {
     private boolean depositOpen = false;
 
     private void createBooks() {
-        // Get the ItemMeta for the books
+
         ItemMeta withDrawMeta = withDrawBook.getItemMeta();
         ItemMeta depositMeta = depositBook.getItemMeta();
 
-        // Ensure the ItemMeta is not null before modifying it
-        if (withDrawMeta != null && depositMeta != null) {
-            // Check if the ItemMeta is an instance of BookMeta before casting
-            if (withDrawMeta instanceof BookMeta && depositMeta instanceof BookMeta) {
-                BookMeta withDrawBookMeta = (BookMeta) withDrawMeta;
-                BookMeta depositBookMeta = (BookMeta) depositMeta;
-
-                // Set the display name for both books
-                withDrawBookMeta.displayName(Component.text(BookFunction.WITHDRAW.name()));
-                depositBookMeta.displayName(Component.text(BookFunction.DEPOSIT.name()));
-
-                // Set the author for both books
-                withDrawBookMeta.setAuthor("Bank");
-                depositBookMeta.setAuthor("Bank");
-
-                // Set the title for both books
-                withDrawBookMeta.setTitle("Withdraw Book");
-                depositBookMeta.setTitle("Deposit Book");
-
-                // Reapply the modified ItemMeta to the items
-                withDrawBook.setItemMeta(withDrawBookMeta);
-                depositBook.setItemMeta(depositBookMeta);
-            } else {
-                // Handle the case when the item is not a book
-                System.out.println("The items are not books.");
-            }
+        if(withDrawMeta instanceof BookMeta && depositMeta instanceof BookMeta){
+            Global.log("meta of withDraw and deposit is instance of book");
+            ((BookMeta)withDrawMeta).setAuthor("Bank");
+            ((BookMeta)depositMeta).setAuthor("Bank");
         }
+        else Global.warn("meta of withDraw and deposit is not an instance of BookMeta");
+        withDrawBook.setItemMeta(withDrawMeta);
+        depositBook.setItemMeta(depositMeta);
     }
 
 
