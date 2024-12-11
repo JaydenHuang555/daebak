@@ -13,6 +13,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jaq.daebak.Constants;
 import org.jaq.daebak.Constants.BankAppConstants;
 import org.jaq.daebak.Daebak;
 import org.jaq.daebak.Global;
@@ -64,7 +65,7 @@ public class BankApp extends App  implements Listener {
     }
 
     public void handle(InventoryClickEvent event){
-        Inventory inventory = Bukkit.createInventory(null, InventoryType.DISPENSER, INV_TITLE);
+        Inventory inventory = Bukkit.createInventory(null, InventoryType.DISPENSER, BankAppConstants.INV_TITLE);
         Client client = Global.tryToGet((Player) event.getWhoClicked());
         inventory.addItem(withDrawBook);
 
@@ -75,14 +76,14 @@ public class BankApp extends App  implements Listener {
 
     @EventHandler
     public void onInventoryClickEvent(InventoryClickEvent event){
-        if(!event.getClickedInventory().toString().contentEquals(INV_TITLE)) return;
+        if(!event.getClickedInventory().toString().contentEquals(BankAppConstants.INV_TITLE)) return;
         Client client = Global.tryToGet((Player) event.getWhoClicked());
-        if(event.getCurrentItem().getItemMeta().displayName().toString().contentEquals(WITHDRAW_TITLE)){
+        if(event.getCurrentItem().getItemMeta().displayName().toString().contentEquals(BankAppConstants.INV_TITLE)){
             withDrawOpen = true;
             client.getPlayer().openBook(withDrawBook);
         }
 
-        if(event.getCurrentItem().getItemMeta().displayName().toString().contentEquals(DEPOSIT_TITLE)){
+        if(event.getCurrentItem().getItemMeta().displayName().toString().contentEquals(BankAppConstants.INV_TITLE)){
             depositOpen = true;
             client.getPlayer().openBook(depositBook);
         }
@@ -91,7 +92,7 @@ public class BankApp extends App  implements Listener {
 
     @EventHandler
     public void onInventoryExit(InventoryCloseEvent event){
-        if(!event.getInventory().toString().contentEquals(INV_TITLE)) return;
+        if(!event.getInventory().toString().contentEquals(BankAppConstants.INV_TITLE)) return;
         if(!(depositOpen || withDrawOpen)) return;
         Client client = Global.tryToGet((Player) event.getPlayer());
         if(depositOpen){
