@@ -21,7 +21,7 @@ public class PlayerEventHandler implements Listener {
         Global.addClient(event.getPlayer());
         Client client = Global.tryToGet(event.getPlayer());
 
-   //     client.spawnAt(Constants.spawnPointLocation);
+
         client.send("welcome to this server");
 
         Global.getBank().addAccount(client);
@@ -32,6 +32,10 @@ public class PlayerEventHandler implements Listener {
     public void onPlayerClickEvent(PlayerInteractEvent event){
         Client client = Global.tryToGet(event.getPlayer());
         ItemMeta metaData = client.getPlayer().getActiveItem().getItemMeta();
+        if(metaData == null) {
+            Global.warn("meta data is null on playerInteract event");
+            return;
+        }
         if(event.getAction().isRightClick()){
             if(metaData.displayName().toString().compareToIgnoreCase(ClientPhoneConstants.title) == 0) client.openPhone();
         }

@@ -2,6 +2,7 @@ package org.jaq.daebak;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.N;
 import org.jaq.daebak.bank.Bank;
 import org.jaq.daebak.client.Client;
 import org.jaq.util.OrderedList;
@@ -63,6 +64,10 @@ public class Global {
 
     public static void warn(@NotNull String s){
         log(Level.WARNING, s);
+    }
+
+    public static void warnf(@NotNull String format, Object ... args){
+        warn(String.format(format, args));
     }
 
 }

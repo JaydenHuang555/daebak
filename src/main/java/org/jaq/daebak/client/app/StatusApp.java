@@ -22,6 +22,7 @@ public class StatusApp extends App  {
         BookMeta meta = (BookMeta) book.getItemMeta();
         meta.title(Component.text(String.format("Wanted: %s", client.getStats().isWanted ? "true" : "false")));
         meta.setAuthor("Police");
+        book.setItemMeta(meta);
         return book;
     }
     public void handle(@NotNull InventoryClickEvent event){

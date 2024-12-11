@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jaq.daebak.Constants.BankAppConstants;
 import org.jaq.daebak.Daebak;
 import org.jaq.daebak.Global;
@@ -38,18 +39,40 @@ public class BankApp extends App  implements Listener {
     private boolean withDrawOpen = false;
     private boolean depositOpen = false;
 
-    private void createBooks(){
-        withDrawBook.getItemMeta().displayName(Component.text(BookFunction.WITHDRAW.name));
-        depositBook.getItemMeta().displayName(Component.text(BookFunction.DEPOSIT.name));
+    private void createBooks() {
+        // Get the ItemMeta for the books
+        ItemMeta withDrawMeta = withDrawBook.getItemMeta();
+        ItemMeta depositMeta = depositBook.getItemMeta();
 
-        ((BookMeta) withDrawBook.getItemMeta()).setAuthor("Bank");
-        ((BookMeta) depositBook.getItemMeta()).setAuthor("Bank");
+        // Ensure the ItemMeta is not null before modifying it
+        if (withDrawMeta != null && depositMeta != null) {
+            // Check if the ItemMeta is an instance of BookMeta before casting
+            if (withDrawMeta instanceof BookMeta && depositMeta instanceof BookMeta) {
+                BookMeta withDrawBookMeta = (BookMeta) withDrawMeta;
+                BookMeta depositBookMeta = (BookMeta) depositMeta;
 
-        ((BookMeta)withDrawBook.getItemMeta()).setTitle("");
-        ((BookMeta)withDrawBook.getItemMeta()).setTitle("");
+                // Set the display name for both books
+                withDrawBookMeta.displayName(Component.text(BookFunction.WITHDRAW.name()));
+                depositBookMeta.displayName(Component.text(BookFunction.DEPOSIT.name()));
 
+                // Set the author for both books
+                withDrawBookMeta.setAuthor("Bank");
+                depositBookMeta.setAuthor("Bank");
 
+                // Set the title for both books
+                withDrawBookMeta.setTitle("Withdraw Book");
+                depositBookMeta.setTitle("Deposit Book");
+
+                // Reapply the modified ItemMeta to the items
+                withDrawBook.setItemMeta(withDrawBookMeta);
+                depositBook.setItemMeta(depositBookMeta);
+            } else {
+                // Handle the case when the item is not a book
+                System.out.println("The items are not books.");
+            }
+        }
     }
+
 
     public BankApp(@NotNull Client client) {
         super(client, new ItemStack(BankAppConstants.MATERIAL), BankAppConstants.NAME);
@@ -67,6 +90,7 @@ public class BankApp extends App  implements Listener {
     public void handle(@NotNull InventoryClickEvent event){
         Inventory inventory = Bukkit.createInventory(null, InventoryType.DISPENSER, BankAppConstants.INV_TITLE);
         Client client = Global.tryToGet((Player) event.getWhoClicked());
+        createBooks();
         inventory.addItem(withDrawBook);
 
         inventory.addItem(getItem(Material.STICK, String.valueOf(Global.getBank().getHeldMoney(client))));
@@ -76,6 +100,7 @@ public class BankApp extends App  implements Listener {
 
     @EventHandler
     public void onInventoryClickEvent(@NotNull InventoryClickEvent event){
+        if(event.getClickedInventory() == null) return;
         if(!event.getClickedInventory().toString().contentEquals(BankAppConstants.INV_TITLE)) return;
         Client client = Global.tryToGet((Player) event.getWhoClicked());
         if(event.getCurrentItem().getItemMeta().displayName().toString().contentEquals(BankAppConstants.INV_TITLE)){

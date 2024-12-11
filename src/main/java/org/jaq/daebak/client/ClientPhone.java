@@ -1,9 +1,14 @@
 package org.jaq.daebak.client;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jaq.daebak.Constants;
 import org.jaq.daebak.Daebak;
 import org.jaq.daebak.Global;
@@ -28,7 +33,13 @@ public class ClientPhone {
     public ClientPhone(@NotNull Client client){
         this.client = client;
         this.registerDefaultApps();
+        Global.log("ClientPhone called");
         inventory = Bukkit.createInventory(null, InventoryType.HOPPER, Constants.ClientPhoneConstants.title);
+        ItemStack stack = new ItemStack(Material.LODESTONE);
+        ItemMeta meta = stack.getItemMeta();
+        meta.displayName(Component.text(Constants.ClientPhoneConstants.title));
+        stack.setItemMeta(meta);
+        client.getPlayer().getWorld().dropItem(client.getPlayer().getLocation(), stack);
     }
 
     public void addApp(@NotNull App app){

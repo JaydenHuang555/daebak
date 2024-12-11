@@ -1,10 +1,15 @@
 package org.jaq.daebak.client;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.Inventory;
 import org.jaq.daebak.Global;
 import org.jetbrains.annotations.NotNull;
+
+import java.nio.Buffer;
 
 public class Client {
     private final Player player;
@@ -13,10 +18,11 @@ public class Client {
     private final Stats stats;
 
     public Client(@NotNull Player player){
+        Global.logf("creating new client %s", player.getName());
         this.player = player;
         this.phone = new ClientPhone(this);
         this.stats = new Stats();
-        this.stats.money = new Money(23);
+        this.stats.money = new Money(23);;
 
     }
 
@@ -26,12 +32,12 @@ public class Client {
 
     public void send(@NotNull String message){
         player.sendMessage(message);
-        Global.logf("sending to %s: %s", player.getName(), message);
+        Bukkit.getLogger().info(String.format("sending to %s: %s", player.getName(), message));
     }
 
     public void sendf(@NotNull String format, Object ... args){
         player.sendMessage(String.format(format, args));
-        Global.logf("sending to %s: %s", player.getName(), String.format(format, args));
+        Bukkit.getLogger().info(String.format("sending to "+player.getName()+": %s", String.format(format, args)));
     }
 
     public void spawnAt(@NotNull Location loc){
