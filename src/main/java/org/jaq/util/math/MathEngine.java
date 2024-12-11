@@ -7,6 +7,7 @@ import org.jaq.util.Util;
 import org.jaq.util.math.token.Token;
 import org.jaq.util.math.token.operator.AddToken;
 import org.jaq.util.math.token.operator.DivToken;
+import org.jaq.util.math.token.operator.ModToken;
 import org.jaq.util.math.token.operator.MultiToken;
 import org.jaq.util.math.token.operator.OperatorToken;
 import org.jaq.util.math.token.operator.SubToken;
@@ -28,6 +29,7 @@ public final class MathEngine<T> {
             case '-': return new SubToken();
             case '*': return new MultiToken();
             case '/': return new DivToken();
+            case '%': return new ModToken();
             default: return null;
         }
     }
