@@ -62,6 +62,8 @@ public class Global {
 
     public static void warning(String s){
         Bukkit.getLogger().warning(s);
+        for(int i = 0; i < clients.getSize(); i++)
+            if(clients.get(i).isOp()) clients.get(i).sendf("console: %s", s);
     }
 
 }
