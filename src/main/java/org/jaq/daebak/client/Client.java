@@ -24,9 +24,14 @@ public class Client {
         phone.display(this);
     }
 
-    public void sendMessage(@NotNull String message){
+    public void send(@NotNull String message){
         player.sendMessage(message);
         Global.logf("sending to %s: %s", player.getName(), message);
+    }
+
+    public void sendf(@NotNull String format, Object ... args){
+        player.sendMessage(String.format(format, args));
+        Global.logf("sending to %s: %s", player.getName(), String.format(format, args));
     }
 
     public void spawnAt(@NotNull Location loc){
@@ -47,6 +52,22 @@ public class Client {
 
     public Stats getStats(){
         return stats;
+    }
+
+    public void deposit(double amount) throws Exception {
+        Global.getBank().deposit(this,amount);
+    }
+
+    public void deposit(Money money) throws Exception {
+        Global.getBank().deposit(this,money);
+    }
+
+    public void withdraw(Money money) throws Exception {
+        Global.getBank().withdraw(this, money);
+    }
+
+    public void withDraw(double amount) throws Exception{
+        Global.getBank().withDraw(this, amount);
     }
 
     @Override

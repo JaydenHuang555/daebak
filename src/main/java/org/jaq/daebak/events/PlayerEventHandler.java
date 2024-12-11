@@ -22,7 +22,7 @@ public class PlayerEventHandler implements Listener {
         Client client = Global.tryToGet(event.getPlayer());
 
    //     client.spawnAt(Constants.spawnPointLocation);
-        client.sendMessage("welcome to this server");
+        client.send("welcome to this server");
 
         Global.getBank().addAccount(client);
 
