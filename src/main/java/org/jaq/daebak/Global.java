@@ -691,6 +691,7 @@ public class Global {
     public final static OrderedList<Client> clients = new OrderedList<>();
     public final static HashMap<Player, Client> clientMap = new HashMap<>();
     public final static Bank bank = new Bank();
+    
 
     public static Daebak daebak;
     public final static boolean isWindows =

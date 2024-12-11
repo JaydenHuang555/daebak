@@ -1,6 +1,7 @@
-package org.jaq.util.math.token;
+package org.jaq.util.math.token.operator;
 
 import org.checkerframework.checker.units.qual.N;
+import org.jaq.util.math.token.OperandToken;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.ApiStatus.OverrideOnly;
 

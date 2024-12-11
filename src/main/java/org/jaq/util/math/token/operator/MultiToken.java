@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 public class MultiToken extends OperatorToken {
 
     public MultiToken(){
-        super("+");
+        super("*");
     }
     @Override
     public OperandToken evalf(@NotNull OperandToken a, @NotNull OperandToken b){

@@ -1,5 +1,7 @@
-package org.jaq.util.math.token;
+package org.jaq.util.math.token.operator;
 
+import org.jaq.util.math.token.OperandToken;
+import org.jaq.util.math.token.Token;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class OperatorToken extends Token{
@@ -8,7 +10,9 @@ public abstract class OperatorToken extends Token{
         super(val);
     }
 
-    public abstract OperandToken eval(@NotNull OperandToken a, @NotNull OperandToken b);
+    public abstract OperandToken evalf(@NotNull OperandToken a, @NotNull OperandToken b);
+
+    public abstract OperandToken evall(@NotNull OperandToken a, @NotNull OperandToken b);
 
 
     public abstract int prec();
