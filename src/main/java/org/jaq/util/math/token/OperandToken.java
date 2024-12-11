@@ -6,6 +6,10 @@ public class OperandToken extends Token {
         super(val);
     }
 
+    public OperandToken(Object obj){
+        super(obj.toString());
+    }
+
     
     
 }

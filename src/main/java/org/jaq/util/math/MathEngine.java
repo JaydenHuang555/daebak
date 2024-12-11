@@ -1,16 +1,18 @@
 package org.jaq.util.math;
 
+import org.checkerframework.checker.units.qual.s;
 import org.jaq.util.OrderedList;
 import org.jaq.util.Stack;
 import org.jaq.util.Util;
 import org.jaq.util.math.token.Token;
+import org.jetbrains.annotations.NotNull;
 import org.jaq.util.math.token.OperandToken;
 import org.jaq.util.math.token.OperatorToken;
 import org.jaq.util.math.token.AddToken;
 
 public final class MathEngine<T> {
     private OrderedList<Token> tokens;
-    private Stack<Token> operators;
+    private Stack<OperatorToken<T>> operators;
 
 
     private OperatorToken<T> getOperatorTokenType(char c){
@@ -37,12 +39,14 @@ public final class MathEngine<T> {
             operators.push(getOperatorTokenType(c));
             return;
         }
-        if(((OperatorToken)operators.peek()).prec() > prec(c)){
-            
+        if((operators.peek()).prec() > prec(c)){
+            while(operators.peek().prec() > prec(c)) tokens.add(operators.pop());
+            operators.push(getOperatorTokenType(c));
         }
+        if(operators.peek().prec() < prec(c)) tokens.add(getOperatorTokenType(c));
     }
 
-    private void digest(String eq){
+    private void digest(@NotNull String eq){
         StringBuilder builder = new StringBuilder();
         for(int i = 0; i < eq.length(); i++){
             char c = eq.charAt(i);
@@ -52,6 +56,7 @@ public final class MathEngine<T> {
                     tokens.add(new OperandToken(builder.toString()));
                     builder = new StringBuilder();
                 }
+                /* meant for handling negatives, suject to removal */
                 else if(c == '-'){
                     builder.append(c);
                     break;
@@ -61,12 +66,26 @@ public final class MathEngine<T> {
             
         }
         
+        while(!operators.isEmpty()) tokens.add(operators.pop());
 
     }
-    @SuppressWarnings("uncheck")
-    public  T eval(String eq){
+    @SuppressWarnings("unchecked")
+    public String eval(@NotNull String eq){
         tokens = new OrderedList<>();
         operators = new Stack<>();
-        return null;
+        digest(eq);
+        Stack<OperandToken> stack = new Stack<>();
+
+        for(int i = 0; i < tokens.getSize(); i++){
+            if(tokens.get(i) instanceof OperandToken) stack.push((OperandToken)tokens.get(i));
+            if(tokens.get(i) instanceof OperatorToken){
+                OperandToken right = stack.pop();
+                OperandToken left = stack.pop();
+                T ret = ((OperatorToken<T>)tokens.get(i)).eval(left, right);
+                stack.push(new OperandToken(ret));
+            }
+        }
+
+        return stack.pop().toString();
     }
 }
