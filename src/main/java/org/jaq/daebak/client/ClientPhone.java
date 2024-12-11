@@ -5,6 +5,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.jaq.daebak.Constants;
+import org.jaq.daebak.Daebak;
+import org.jaq.daebak.Global;
 import org.jaq.daebak.client.app.App;
 import org.jaq.daebak.client.app.BankApp;
 import org.jaq.daebak.client.app.StatusApp;

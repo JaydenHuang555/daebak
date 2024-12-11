@@ -47,6 +47,11 @@ public class Client {
         return stats;
     }
 
+    @Override
+    public String toString(){
+        return player.getName();
+    }
+
     public class Stats {
         public Money money;
         public boolean isWanted = false;

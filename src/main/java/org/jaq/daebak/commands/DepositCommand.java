@@ -20,7 +20,7 @@ public class DepositCommand implements CommandExecutor {
             Client sender = Global.tryToGet((Player) commandSender);
             Global.getBank().deposit(sender, Double.parseDouble(args[0]));
         } catch (Exception e){
-            Bukkit.getLogger().warning(e.toString());
+            Global.warning(e.toString());
             return false;
         }
         return true;

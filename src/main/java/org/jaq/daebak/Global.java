@@ -1,12 +1,16 @@
 package org.jaq.daebak;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.jaq.daebak.bank.Bank;
 import org.jaq.daebak.client.Client;
 import org.jaq.util.HashTable;
 import org.jaq.util.OrderedList;
 import org.jetbrains.annotations.NotNull;
+import java.io.File;
 
+import java.io.File;
 import java.util.HashMap;
 
 public class Global {
@@ -14,7 +18,8 @@ public class Global {
     public final static HashMap<Player, Client> clientMap = new HashMap<>();
     public final static Bank bank = new Bank();
 
-    // public final static boolean isWin = System.getProperty("os name").contains("win");
+    public static Daebak daebak;
+
 
     public static void addClient(@NotNull Player player){
         Client client = new Client(player);
@@ -31,8 +36,16 @@ public class Global {
         return bank;
     }
 
-    /* public static boolean isWindows(){
-        return isWin;
-    } */
+    public static Daebak getDaebak(){
+        return daebak;
+    }
+
+    public static void log(String s){
+        Bukkit.getLogger().info(s);
+    }
+
+    public static void warning(String s){
+        Bukkit.getLogger().warning(s);
+    }
 
 }

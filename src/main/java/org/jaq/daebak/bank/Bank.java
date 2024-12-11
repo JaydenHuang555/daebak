@@ -2,6 +2,7 @@ package org.jaq.daebak.bank;
 
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
+import org.jaq.daebak.Constants;
 import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
 import org.jaq.daebak.client.Money;
@@ -61,6 +62,9 @@ public final class Bank {
         if(amount > client.getStats().money.amount) throw new Exception(String.format("unable to deposit money for client %s", client.getPlayer().name()));
         client.getStats().money.amount -= amount;
         accounts.get(client).bankMoney.amount += amount;
+
+        Global.log(String.format("%s deposited %s%f", client.toString(), Constants.currencySymbol, amount));
+
     }
 
     public void deposit(@NotNull Client client, @NotNull  Money amount) throws Exception {
@@ -71,6 +75,7 @@ public final class Bank {
         if(accounts.get(client).bankMoney.amount < amount) throw new Exception(String.format("unable to withdraw money for client %s", client.getPlayer().name()));
         client.getStats().money.amount += amount;
         accounts.get(client).bankMoney.amount -= amount;
+        Global.log(String.format("%s withdrew %s%f", client.toString(), Constants.currencySymbol, amount));
     }
 
     public void withdraw(@NotNull Client client, @NotNull Money money) throws Exception{
@@ -83,11 +88,8 @@ public final class Bank {
 
     public void flush(){
         try {
-            // String firstCommand = Global.isWindows() ? "powershell -Command rm -bank.json" : "rm -rf bank.json";
-            // String secondCommand = Global.isWindows() ? "powershell -Command mv bank.json.bp bank.json" : "mv bank.json.bp bank.json";
-
-            String firstCommand = "rm -rf bank.json";
-            String secondCommand = "mv bank.json.bp bank.json";
+            String firstCommand = Constants.isWindows() ? "powershell -Command rm -bank.json" : "rm -rf bank.json";
+            String secondCommand = Constants.isWindows() ? "powershell -Command mv bank.json.bp bank.json" : "mv bank.json.bp bank.json";
 
             PrintWriter writer = new PrintWriter("bank.json.bp");
             Gson gson = new Gson();
@@ -95,11 +97,11 @@ public final class Bank {
             writer.flush();
             writer.close();
 
-            if(Runtime.getRuntime().exec(firstCommand).exitValue() != 0) throw new Exception();
-            if(Runtime.getRuntime().exec(secondCommand).exitValue() != 0) throw new Exception();
+            if(Runtime.getRuntime().exec(firstCommand).exitValue() != 0) throw new Exception("unable to remove bank.json file");
+            if(Runtime.getRuntime().exec(secondCommand).exitValue() != 0) throw new Exception("unable to mv bank.json.bp file to bank.json");
 
         } catch (Exception e){
-            Bukkit.getLogger().warning(e.toString());
+            Global.warning(e.toString());
         }
     }
 

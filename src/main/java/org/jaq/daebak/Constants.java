@@ -9,9 +9,19 @@ import org.jaq.daebak.commands.DislayCommand;
 import org.jaq.daebak.commands.WithDrawCommand;
 import org.jaq.util.OrderedList;
 
+import java.io.File;
+
 public final class Constants {
     public static Location spawnPointLocation = new Location(Bukkit.getWorld(""), 0.0, 0.0, 0.0);
     public final static OrderedList<CommandExecutor> commands = new OrderedList<>();
+
+    public final static String currencySymbol = "₩";
+
+    public final static boolean isWindows = File.separator.equals("\\");
+
+    public final static boolean isWindows(){
+        return isWindows;
+    }
 
     static {
         commands.add(new DepositCommand());

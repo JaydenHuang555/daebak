@@ -1,6 +1,7 @@
 package org.jaq.daebak;
 
 import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jaq.daebak.commands.DepositCommand;
 import org.jaq.daebak.commands.DislayCommand;
@@ -10,9 +11,19 @@ import org.jaq.daebak.Constants.AdminConstants;
 
 public final class Daebak extends JavaPlugin {
 
+    public Daebak(){
+        super();
+        Global.daebak = this;
+    }
+
     public void writeCommand(String command){
         Bukkit.dispatchCommand(getServer().getConsoleSender(), String.format(command));
     }
+
+    public static void registerEvent(Listener listener){
+        Bukkit.getServer().getPluginManager().registerEvents(listener, Global.getDaebak());
+    }
+
     /*TODO: add checks for valid command */
     private void initCommands(){
         for(int i = 0; i < Constants.commands.getSize(); i++){
