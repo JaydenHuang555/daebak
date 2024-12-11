@@ -705,15 +705,12 @@ public class PlayerEventHandler implements Listener {
 
     @EventHandler
     public void onPlayerClickEvent(PlayerInteractEvent event){
-        Client client = Global.tryToGet(event.getPlayer());
-        ItemMeta metaData = client.getPlayer().getActiveItem().getItemMeta();
-        if(metaData == null) {
-            Global.warn("meta data is null on playerInteract event");
-            return;
-        }
-        if(event.getAction().isRightClick()){
-            if(metaData.displayName().toString().compareToIgnoreCase(ClientPhoneConstants.title) == 0) client.openPhone();
-        }
+       if(event.getPlayer() == null) return;
+       Client client = Global.tryToGet(event.getPlayer());
+       if(event.getItem().getItemMeta().displayName().toString().contentEquals(ClientPhoneConstants.title)){
+          Global.logf("opening phone for client %s", client.name());
+       }
+
     }
 
     @EventHandler

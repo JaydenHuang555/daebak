@@ -757,6 +757,10 @@ public class Client {
         return player.isOp();
     }
 
+    public String name(){
+        return player.getName();
+    }
+
     @Override
     public String toString(){
         return player.getName();
