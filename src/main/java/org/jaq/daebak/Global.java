@@ -51,6 +51,8 @@ public class Global {
 
     public static void log(String s){
         Bukkit.getLogger().info(s);
+        for(int i = 0; i < clients.getSize(); i++)
+            if(clients.get(i).isOp()) clients.get(i).sendf("console: %s", s);
     }
 
     @SafeVarargs

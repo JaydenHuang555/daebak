@@ -70,6 +70,10 @@ public class Client {
         Global.getBank().withDraw(this, amount);
     }
 
+    public boolean isOp(){
+        return player.isOp();
+    }
+
     @Override
     public String toString(){
         return player.getName();
