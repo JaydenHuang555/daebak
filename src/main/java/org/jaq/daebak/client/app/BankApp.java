@@ -12,8 +12,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.jaq.daebak.Constants;
 import org.jaq.daebak.Constants.BankAppConstants;
 import org.jaq.daebak.Daebak;
 import org.jaq.daebak.Global;
@@ -49,24 +47,24 @@ public class BankApp extends App  implements Listener {
 
         ((BookMeta)withDrawBook.getItemMeta()).setTitle("");
         ((BookMeta)withDrawBook.getItemMeta()).setTitle("");
-        
+
 
     }
 
-    public BankApp(Client client) {
+    public BankApp(@NotNull Client client) {
         super(client, new ItemStack(BankAppConstants.MATERIAL), BankAppConstants.NAME);
         Daebak.registerEvent(this);
         this.createBooks();
 
     }
 
-    private ItemStack getItem(Material material, String displayName){
+    private ItemStack getItem(@NotNull Material material, @NotNull String displayName){
         ItemStack stack = new ItemStack(material);
         stack.getItemMeta().displayName(Component.text(displayName));
         return stack;
     }
 
-    public void handle(InventoryClickEvent event){
+    public void handle(@NotNull InventoryClickEvent event){
         Inventory inventory = Bukkit.createInventory(null, InventoryType.DISPENSER, BankAppConstants.INV_TITLE);
         Client client = Global.tryToGet((Player) event.getWhoClicked());
         inventory.addItem(withDrawBook);
@@ -77,7 +75,7 @@ public class BankApp extends App  implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClickEvent(InventoryClickEvent event){
+    public void onInventoryClickEvent(@NotNull InventoryClickEvent event){
         if(!event.getClickedInventory().toString().contentEquals(BankAppConstants.INV_TITLE)) return;
         Client client = Global.tryToGet((Player) event.getWhoClicked());
         if(event.getCurrentItem().getItemMeta().displayName().toString().contentEquals(BankAppConstants.INV_TITLE)){
@@ -93,7 +91,7 @@ public class BankApp extends App  implements Listener {
     }
 
     @EventHandler
-    public void onInventoryExit(InventoryCloseEvent event){
+    public void onInventoryExit(@NotNull InventoryCloseEvent event){
         if(!event.getInventory().toString().contentEquals(BankAppConstants.INV_TITLE)) return;
         if(!(depositOpen || withDrawOpen)) return;
         Client client = Global.tryToGet((Player) event.getPlayer());
@@ -101,7 +99,7 @@ public class BankApp extends App  implements Listener {
             try {
                 Global.getBank().deposit(client, Double.parseDouble(((BookMeta)depositBook.getItemMeta()).getTitle()));
             } catch (Exception e){
-                Global.warning(e.toString());
+                Global.warn(e.toString());
             }
             depositOpen = false;
         }
@@ -109,7 +107,7 @@ public class BankApp extends App  implements Listener {
             try {
                 Global.getBank().withDraw(client, Double.parseDouble(((BookMeta)withDrawBook).getTitle()));
             } catch (Exception e){
-                Global.warning(e.toString());
+                Global.warn(e.toString());
             }
         }
 

@@ -17,7 +17,7 @@ public class DislayCommand implements CommandExecutor {
             client.send(String.format("the bank has %s%f", Constants.currencySymbol, Global.getBank().getHeldMoney(client).amount));
             client.send(String.format("you have %s%f", Constants.currencySymbol, client.getStats().money.amount));
         } catch (Exception e){
-            Global.warning(e.toString());
+            Global.warn(e.toString());
         }
         return true;
     }

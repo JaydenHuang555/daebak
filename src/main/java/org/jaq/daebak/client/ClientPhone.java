@@ -25,7 +25,7 @@ public class ClientPhone {
         this.addApp(new StatusApp(client));
     }
 
-    public ClientPhone(Client client){
+    public ClientPhone(@NotNull Client client){
         this.client = client;
         this.registerDefaultApps();
         inventory = Bukkit.createInventory(null, InventoryType.HOPPER, Constants.ClientPhoneConstants.title);

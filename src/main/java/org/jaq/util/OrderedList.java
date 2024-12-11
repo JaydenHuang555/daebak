@@ -29,6 +29,15 @@ public class OrderedList<T> {
         return size;
     }
 
+
+    public boolean equals(OrderedList<T> other) {
+        if(other.getSize() != getSize()) return false;
+        for(int i = 0; i < other.getSize(); i++){
+            if(other.get(i) != subList[i]) return false;
+        }
+        return true;
+    }
+
     public String toString(){
         return null;
     }

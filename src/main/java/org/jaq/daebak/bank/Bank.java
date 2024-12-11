@@ -1,16 +1,13 @@
 package org.jaq.daebak.bank;
 
 import com.google.gson.Gson;
-import org.bukkit.Bukkit;
 import org.jaq.daebak.Constants;
 import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
 import org.jaq.daebak.client.Money;
-import org.jaq.util.HashTable;
 import org.jaq.util.OrderedList;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
@@ -101,7 +98,7 @@ public final class Bank {
             if(Runtime.getRuntime().exec(secondCommand).exitValue() != 0) throw new Exception("unable to mv bank.json.bp file to bank.json");
 
         } catch (Exception e){
-            Global.warning(e.toString());
+            Global.warn(e.toString());
         }
     }
 

@@ -9,10 +9,11 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.jaq.daebak.Constants;
 import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
+import org.jetbrains.annotations.NotNull;
 
 public class StatusApp extends App  {
 
-    public StatusApp(Client client) {
+    public StatusApp(@NotNull Client client) {
         super(client, new ItemStack(Constants.StatusAppConstants.MATERIAL), Constants.StatusAppConstants.NAME);
     }
 
@@ -23,7 +24,7 @@ public class StatusApp extends App  {
         meta.setAuthor("Police");
         return book;
     }
-    public void handle(InventoryClickEvent event){
+    public void handle(@NotNull InventoryClickEvent event){
         Global.tryToGet((Player) event.getWhoClicked()).getPlayer().openBook(buildBook());
     }
 

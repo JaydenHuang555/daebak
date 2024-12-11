@@ -1,6 +1,6 @@
 package org.jaq.util;
 
-public class Stack<T> {
+public final class Stack<T> {
 
     StackNode head, tail;
 
@@ -21,11 +21,11 @@ public class Stack<T> {
             tail = tail.next;
         }
     }
-
+    @SuppressWarnings("unchecked")
     public T peek(){
         return (T)tail.val;
     }
-
+    @SuppressWarnings("unchecked")
     public T pop(){
         T val = peek();
         if(tail == head) head = null;
@@ -42,7 +42,7 @@ public class Stack<T> {
 
 }
 
-class StackNode {
+final class StackNode {
     Object val;
     StackNode prev, next;
 
