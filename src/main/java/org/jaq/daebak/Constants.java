@@ -17,12 +17,6 @@ public final class Constants {
 
     public final static String currencySymbol = "₩";
 
-    public final static boolean isWindows = File.separator.equals("\\");
-
-    public final static boolean isWindows(){
-        return isWindows;
-    }
-
     static {
         commands.add(new DepositCommand());
         commands.add(new DislayCommand());

@@ -7,6 +7,7 @@ import org.jaq.daebak.bank.Bank;
 import org.jaq.daebak.client.Client;
 import org.jaq.util.HashTable;
 import org.jaq.util.OrderedList;
+import org.jaq.util.PropertyType;
 import org.jetbrains.annotations.NotNull;
 import java.io.File;
 
@@ -19,6 +20,13 @@ public class Global {
     public final static Bank bank = new Bank();
 
     public static Daebak daebak;
+
+    // public final static boolean isWindows = File.separator.equals("\\");
+    public final static boolean isWindows = System.getProperty(PropertyType.OS_NAME.key()).contains("win");
+
+    public final static boolean isWindows(){
+        return isWindows;
+    }
 
 
     public static void addClient(@NotNull Player player){
@@ -45,6 +53,7 @@ public class Global {
         Bukkit.getLogger().info(s);
     }
 
+    @SafeVarargs
     public static void logf(String format, Object ...args){
         log(String.format(format, args));
     }

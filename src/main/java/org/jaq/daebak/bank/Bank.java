@@ -63,7 +63,7 @@ public final class Bank {
         client.getStats().money.amount -= amount;
         accounts.get(client).bankMoney.amount += amount;
 
-        Global.log(String.format("%s deposited %s%f", client.toString(), Constants.currencySymbol, amount));
+        Global.logf("%s deposited %s%f", client.toString(), Constants.currencySymbol, amount);
 
     }
 
@@ -75,7 +75,7 @@ public final class Bank {
         if(accounts.get(client).bankMoney.amount < amount) throw new Exception(String.format("unable to withdraw money for client %s", client.getPlayer().name()));
         client.getStats().money.amount += amount;
         accounts.get(client).bankMoney.amount -= amount;
-        Global.log(String.format("%s withdrew %s%f", client.toString(), Constants.currencySymbol, amount));
+        Global.logf("%s withdrew %s%f", client.toString(), Constants.currencySymbol, amount);
     }
 
     public void withdraw(@NotNull Client client, @NotNull Money money) throws Exception{
@@ -88,8 +88,8 @@ public final class Bank {
 
     public void flush(){
         try {
-            String firstCommand = Constants.isWindows() ? "powershell -Command rm -bank.json" : "rm -rf bank.json";
-            String secondCommand = Constants.isWindows() ? "powershell -Command mv bank.json.bp bank.json" : "mv bank.json.bp bank.json";
+            String firstCommand = Global.isWindows() ? "powershell -Command rm -bank.json" : "rm -rf bank.json";
+            String secondCommand = Global.isWindows() ? "powershell -Command mv bank.json.bp bank.json" : "mv bank.json.bp bank.json";
 
             PrintWriter writer = new PrintWriter("bank.json.bp");
             Gson gson = new Gson();
