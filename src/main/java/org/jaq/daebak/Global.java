@@ -13,6 +13,7 @@ import java.io.File;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class Global {
     public final static OrderedList<Client> clients = new OrderedList<>();
@@ -49,10 +50,14 @@ public class Global {
         return daebak;
     }
 
-    public static void log(String s){
-        Bukkit.getLogger().info(s);
+    public static void log(Level level, String s){
+        Bukkit.getLogger().log(level, s);
         for(int i = 0; i < clients.getSize(); i++)
             if(clients.get(i).isOp()) clients.get(i).sendf("console: %s", s);
+    }
+
+    public static void log(String s){
+        log(Level.INFO, s);
     }
 
     @SafeVarargs
@@ -61,9 +66,7 @@ public class Global {
     }
 
     public static void warning(String s){
-        Bukkit.getLogger().warning(s);
-        for(int i = 0; i < clients.getSize(); i++)
-            if(clients.get(i).isOp()) clients.get(i).sendf("console: %s", s);
+        log(Level.WARNING, s);
     }
 
 }
