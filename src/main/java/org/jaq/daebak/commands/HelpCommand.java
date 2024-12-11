@@ -29,4 +29,9 @@ public class HelpCommand extends CommandTemplate implements CommandExecutor {
     public String usage() {
         return "/help";
     }
+
+    @Override
+    public String toString(){
+        return "help";
+    }
 }
