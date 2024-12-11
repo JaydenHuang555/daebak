@@ -12,12 +12,12 @@ import org.jaq.util.math.token.AddToken;
 
 public final class MathEngine<T> {
     private OrderedList<Token> tokens;
-    private Stack<OperatorToken<T>> operators;
+    private Stack<OperatorToken> operators;
 
 
-    private OperatorToken<T> getOperatorTokenType(char c){
+    private OperatorToken getOperatorTokenType(char c){
         switch(c){
-            case '+': return new AddToken<T>();
+            case '+': return new AddToken();
             default: return null;
         }
     }
@@ -39,11 +39,12 @@ public final class MathEngine<T> {
             operators.push(getOperatorTokenType(c));
             return;
         }
-        if((operators.peek()).prec() > prec(c)){
+        else if((operators.peek()).prec() > prec(c)){
             while(operators.peek().prec() > prec(c)) tokens.add(operators.pop());
             operators.push(getOperatorTokenType(c));
         }
-        if(operators.peek().prec() < prec(c)) tokens.add(getOperatorTokenType(c));
+        else if(operators.peek().prec() < prec(c)) tokens.add(getOperatorTokenType(c));
+        else operators.push(getOperatorTokenType(c));
     }
 
     private void digest(@NotNull String eq){
@@ -69,8 +70,8 @@ public final class MathEngine<T> {
         while(!operators.isEmpty()) tokens.add(operators.pop());
 
     }
-    @SuppressWarnings("unchecked")
-    public String eval(@NotNull String eq){
+    )
+    public double eval(@NotNull String eq){
         tokens = new OrderedList<>();
         operators = new Stack<>();
         digest(eq);
@@ -81,11 +82,10 @@ public final class MathEngine<T> {
             if(tokens.get(i) instanceof OperatorToken){
                 OperandToken right = stack.pop();
                 OperandToken left = stack.pop();
-                T ret = ((OperatorToken<T>)tokens.get(i)).eval(left, right);
-                stack.push(new OperandToken(ret));
+                stack.push(((OperatorToken)tokens.get(i)).evalf(right, left));
             }
         }
 
-        return stack.pop().toString();
+        return stack.pop().valf();
     }
 }
