@@ -22,7 +22,6 @@ public final class MathEngine<T> {
     private OrderedList<Token> tokens;
     private Stack<OperatorToken> operators;
 
-
     private OperatorToken getOperatorTokenType(char c){
         switch(c){
             case '+': return new AddToken();
@@ -30,7 +29,7 @@ public final class MathEngine<T> {
             case '*': return new MultiToken();
             case '/': return new DivToken();
             case '%': return new ModToken();
-            default: return null;
+            default: throw new RuntimeException(String.format("%c is not a valid operator flag", c));
         }
     }
 
