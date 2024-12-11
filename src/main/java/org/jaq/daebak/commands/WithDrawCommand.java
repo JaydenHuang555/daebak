@@ -13,7 +13,7 @@ public class WithDrawCommand extends CommandTemplate implements CommandExecutor 
     public boolean onCommand(CommandSender sender, Command command, String label, String args[]){
         Client client = Global.tryToGet((Player) sender);
         if(args.length == 0) {
-            client.send("valid usage: /withdraw <amount>");
+            client.sendf("usage: %s", usage());
             return false;
         }
         try {

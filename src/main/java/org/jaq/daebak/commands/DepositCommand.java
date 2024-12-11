@@ -18,7 +18,7 @@ public class DepositCommand extends CommandTemplate implements CommandExecutor {
         try {
             Client sender = Global.tryToGet((Player) commandSender);
             if(args.length == 0){
-                sender.send("/deposit: /deposit <amount>");
+                sender.sendf("usage: %s", usage());
                 return false;
             }
             sender.deposit(Double.parseDouble(args[0]));
