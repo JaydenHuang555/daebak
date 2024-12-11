@@ -679,7 +679,7 @@ public final class Stack<T> {
 
     StackNode head, tail;
 
-    Stack(){
+    public Stack(){
         this.head = null;
         this.tail = null;
     }
