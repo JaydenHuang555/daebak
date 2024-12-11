@@ -18,6 +18,7 @@ import org.jaq.daebak.Constants.BankAppConstants;
 import org.jaq.daebak.Daebak;
 import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
+import org.jetbrains.annotations.NotNull;
 
 public class BankApp extends App  implements Listener {
 
@@ -27,7 +28,7 @@ public class BankApp extends App  implements Listener {
         ;
         public final String name;
         public final ItemStack book;
-        private BookFunction(String name, ItemStack book){
+        private BookFunction(@NotNull String name, @NotNull ItemStack book){
             this.name = name;
             this.book = book;
         }

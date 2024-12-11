@@ -3,6 +3,7 @@ package org.jaq.daebak.client;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.jaq.daebak.Global;
 import org.jetbrains.annotations.NotNull;
 
 public class Client {
@@ -25,6 +26,7 @@ public class Client {
 
     public void sendMessage(@NotNull String message){
         player.sendMessage(message);
+        Global.logf("sending to %s: %s", player.getName(), message);
     }
 
     public void spawnAt(@NotNull Location loc){

@@ -25,6 +25,7 @@ public class Global {
         Client client = new Client(player);
         clients.add(client);
         clientMap.put(player, client);
+        Global.logf("added player %s to clients", player.getName());
     }
 
     public static Client tryToGet(@NotNull Player key){
@@ -42,6 +43,10 @@ public class Global {
 
     public static void log(String s){
         Bukkit.getLogger().info(s);
+    }
+
+    public static void logf(String format, Object ...args){
+        log(String.format(format, args));
     }
 
     public static void warning(String s){

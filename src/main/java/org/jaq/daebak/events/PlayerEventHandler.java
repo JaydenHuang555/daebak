@@ -23,7 +23,6 @@ public class PlayerEventHandler implements Listener {
 
    //     client.spawnAt(Constants.spawnPointLocation);
         client.sendMessage("welcome to this server");
-        Bukkit.getLogger().info(String.format("adding %s as client", client.getPlayer().name()));
 
         Global.getBank().addAccount(client);
 
