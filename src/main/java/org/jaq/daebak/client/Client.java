@@ -56,5 +56,4 @@ public class Client {
         public Money money;
         public boolean isWanted = false;
     }
-
 }
