@@ -20,23 +20,33 @@ import org.jaq.daebak.client.Client;
 
 public class BankApp extends App  implements Listener {
 
-    private final String INV_TITLE = "BankApp";
-    private final String WITHDRAW_TITLE = "withdraw";
-    private final String DEPOSIT_TITLE  = "deposit";
+    private enum BookFunction {
+        WITHDRAW(BankAppConstants.WITHDRAW_TITLE, new ItemStack(Material.BOOK)),
+        DEPOSIT(BankAppConstants.DEPOSIT_TITLE, new ItemStack(Material.BOOK))
+        ;
+        public final String name;
+        public final ItemStack book;
+        private BookFunction(String name, ItemStack book){
+            this.name = name;
+            this.book = book;
+        }
+    }
 
-    private ItemStack withDrawBook, depositBook;
+    private ItemStack withDrawBook = BookFunction.WITHDRAW.book;
+    private ItemStack depositBook = BookFunction.DEPOSIT.book;
 
     private boolean withDrawOpen = false;
     private boolean depositOpen = false;
 
     private void createBooks(){
-        withDrawBook = new ItemStack(Material.BOOK);
-        depositBook = new ItemStack(Material.BOOK);
-        withDrawBook.getItemMeta().displayName(Component.text(WITHDRAW_TITLE));
-        depositBook.getItemMeta().displayName(Component.text(DEPOSIT_TITLE));
+        withDrawBook.getItemMeta().displayName(Component.text(BookFunction.WITHDRAW.name));
+        depositBook.getItemMeta().displayName(Component.text(BookFunction.DEPOSIT.name));
 
         ((BookMeta) withDrawBook.getItemMeta()).setAuthor("Bank");
         ((BookMeta) depositBook.getItemMeta()).setAuthor("Bank");
+
+        ((BookMeta)withDrawBook.getItemMeta()).setTitle("");
+        ((BookMeta)withDrawBook.getItemMeta()).setTitle("");
 
     }
 

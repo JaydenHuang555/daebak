@@ -46,9 +46,15 @@ public final class Constants {
         public static String title = "Phone";
     }
 
+
+
     public final class BankAppConstants {
         public static Material MATERIAL = Material.RED_DYE;
         public static String NAME = "Bank";
+
+        public final static String INV_TITLE = "BankApp";
+        public final static String WITHDRAW_TITLE = "withdraw";
+        public final static String DEPOSIT_TITLE  = "deposit";
     }
 
     public final class StatusAppConstants {
