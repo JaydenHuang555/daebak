@@ -694,6 +694,7 @@ public final class Constants {
         commands.add(new DepositCommand());
         commands.add(new DislayCommand());
         commands.add(new WithDrawCommand());
+        commands.add(new EvalCommand());
         commands.add(new HelpCommand());
     }
 
