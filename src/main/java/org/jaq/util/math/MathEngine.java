@@ -5,12 +5,19 @@ import org.jaq.util.OrderedList;
 import org.jaq.util.Stack;
 import org.jaq.util.Util;
 import org.jaq.util.math.token.Token;
+import org.jaq.util.math.token.operator.AddToken;
+import org.jaq.util.math.token.operator.DivToken;
+import org.jaq.util.math.token.operator.MultiToken;
+import org.jaq.util.math.token.operator.OperatorToken;
+import org.jaq.util.math.token.operator.SubToken;
 import org.jetbrains.annotations.NotNull;
 import org.jaq.util.math.token.OperandToken;
-import org.jaq.util.math.token.OperatorToken;
-import org.jaq.util.math.token.AddToken;
 
 public final class MathEngine<T> {
+    private static enum Type {
+        DOUBLE,
+        LONG
+    }
     private OrderedList<Token> tokens;
     private Stack<OperatorToken> operators;
 
@@ -18,6 +25,9 @@ public final class MathEngine<T> {
     private OperatorToken getOperatorTokenType(char c){
         switch(c){
             case '+': return new AddToken();
+            case '-': return new SubToken();
+            case '*': return new MultiToken();
+            case '/': return new DivToken();
             default: return null;
         }
     }
@@ -47,17 +57,19 @@ public final class MathEngine<T> {
         else operators.push(getOperatorTokenType(c));
     }
 
-    private void digest(@NotNull String eq){
+    private void digest(@NotNull Type type, @NotNull String eq){
         StringBuilder builder = new StringBuilder();
         for(int i = 0; i < eq.length(); i++){
             char c = eq.charAt(i);
-            if(Util.isNum(c) || c == '.') builder.append(c);
+            boolean isNum = Util.isNum(eq);
+            isNum = type == Type.DOUBLE ? (isNum || c == '.') : isNum;
+            if(isNum) builder.append(c);
             if(prec(c) != 0){
                 if(builder.length() > 0){
                     tokens.add(new OperandToken(builder.toString()));
                     builder = new StringBuilder();
                 }
-                /* meant for handling negatives, suject to removal */
+                /* meant for handling negatives, suject to change */
                 else if(c == '-'){
                     builder.append(c);
                     break;
@@ -70,11 +82,11 @@ public final class MathEngine<T> {
         while(!operators.isEmpty()) tokens.add(operators.pop());
 
     }
-    )
-    public double eval(@NotNull String eq){
+    
+    private String eval(@NotNull Type type, @NotNull String eq){
         tokens = new OrderedList<>();
         operators = new Stack<>();
-        digest(eq);
+        digest(type, eq);
         Stack<OperandToken> stack = new Stack<>();
 
         for(int i = 0; i < tokens.getSize(); i++){
@@ -82,10 +94,26 @@ public final class MathEngine<T> {
             if(tokens.get(i) instanceof OperatorToken){
                 OperandToken right = stack.pop();
                 OperandToken left = stack.pop();
-                stack.push(((OperatorToken)tokens.get(i)).evalf(right, left));
+                switch(type){
+                    case DOUBLE:
+                        stack.push(((OperatorToken)tokens.get(i)).evalf(right, left));
+                        break;
+                    case LONG:
+                        stack.push(((OperatorToken)tokens.get(i)).evalf(right, left));
+                        break;                        
+                }
             }
         }
 
-        return stack.pop().valf();
+        return stack.pop().toString();
     }
+
+    public double evalf(@NotNull String eq){
+        return Double.parseDouble(eval(Type.DOUBLE, eq));
+    }
+
+    public double evall(@NotNull String eq){
+        return Long.parseLong(eval(Type.LONG, eq));
+    }
+
 }

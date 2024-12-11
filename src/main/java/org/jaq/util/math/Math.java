@@ -10,8 +10,12 @@ public class Math {
 
     private final static MathEngine<Double> engine = new MathEngine<>();
     
-    public static String eval(@NotNull String eq){
-        return engine.eval(eq);
+    public static double evalf(@NotNull String eq){
+        return engine.evalf(eq);
+    }
+
+    public static double evall(@NotNull String eq){
+        return engine.evall(eq);
     }
 
 }

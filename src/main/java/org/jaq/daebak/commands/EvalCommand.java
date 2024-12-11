@@ -17,7 +17,7 @@ public class EvalCommand extends CommandTemplate implements CommandExecutor{
             ((Player)sender).sendMessage("usage: %s", usage());
             return false;            
         }
-        ((Player)sender).sendMessage("%s", Math.eval(args[0]));
+        ((Player)sender).sendMessage(String.valueOf(Math.eval(args[0])));
         return true;
     }
 
