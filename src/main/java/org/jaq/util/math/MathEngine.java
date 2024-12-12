@@ -1,6 +1,7 @@
 package org.jaq.util.math;
 
 import org.checkerframework.checker.units.qual.s;
+import org.jaq.daebak.Global;
 import org.jaq.util.OrderedList;
 import org.jaq.util.Stack;
 import org.jaq.util.Util;
@@ -48,47 +49,54 @@ public final class MathEngine<T> {
     private void handleOperator(char c){
         if(operators.isEmpty()){
             operators.push(getOperatorTokenType(c));
-            return;
         }
-        else if((operators.peek()).prec() > prec(c)){
-            while(operators.peek().prec() > prec(c)) tokens.add(operators.pop());
+        else {
+            while(!operators.isEmpty() && operators.peek().prec() >= prec(c)) tokens.add(operators.pop());
             operators.push(getOperatorTokenType(c));
         }
-        else if(operators.peek().prec() < prec(c)) tokens.add(getOperatorTokenType(c));
-        else operators.push(getOperatorTokenType(c));
+
     }
 
-    private void digest(@NotNull Type type, @NotNull String eq){
+    private OrderedList<Token> digest(@NotNull Type type, @NotNull String eq){
         StringBuilder builder = new StringBuilder();
         for(int i = 0; i < eq.length(); i++){
             char c = eq.charAt(i);
-            boolean isNum = Util.isNum(eq);
+            Global.logf("c is %c", c);
+            boolean isNum = Util.isNum(c);
             isNum = type == Type.DOUBLE ? (isNum || c == '.') : isNum;
-            if(isNum) builder.append(c);
-            if(prec(c) != 0){
+            if(isNum) {
+                Global.logf("appending %c to builder", c);
+                builder.append(c);
+            }
+            if(!isNum){
                 if(builder.length() > 0){
                     tokens.add(new OperandToken(builder.toString()));
                     builder = new StringBuilder();
+                    Global.logf("appending %s", builder.toString());
                 }
                 /* meant for handling negatives, suject to change */
                 else if(c == '-'){
+                    Global.logf("appending %c to builder", c);
                     builder.append(c);
                     break;
                 }
+                Global.logf("handling operator %c", c);
                 handleOperator(c);
             }
             
         }
-        
+        if(!builder.isEmpty()) tokens.add(new OperandToken(builder.toString()));
         while(!operators.isEmpty()) tokens.add(operators.pop());
-
+        for(int i = 0; i < tokens.getSize(); i++) Global.logf("token at %d is %s", i, tokens.get(i).toString());
+        return tokens;
     }
     
     private String eval(@NotNull Type type, @NotNull String eq){
         tokens = new OrderedList<>();
         operators = new Stack<>();
-        digest(type, eq);
+        tokens = digest(type, eq);
         Stack<OperandToken> stack = new Stack<>();
+        Global.logf("tokens size is %d", tokens.getSize());
 
         for(int i = 0; i < tokens.getSize(); i++){
             if(tokens.get(i) instanceof OperandToken) stack.push((OperandToken)tokens.get(i));
@@ -100,12 +108,17 @@ public final class MathEngine<T> {
                         stack.push(((OperatorToken)tokens.get(i)).evalf(right, left));
                         break;
                     case LONG:
-                        stack.push(((OperatorToken)tokens.get(i)).evalf(right, left));
-                        break;                        
+                        stack.push(((OperatorToken)tokens.get(i)).evall(right, left));
+                        break;
+                    default:
+                        break;
                 }
+                if(!stack.isEmpty())
+                Global.logf("peek is now %s ", stack.peek());
             }
         }
 
+       // return stack.pop().toString();
         return stack.pop().toString();
     }
 

@@ -706,7 +706,10 @@ public final class Stack<T> {
     @SuppressWarnings("unchecked")
     public T pop(){
         T val = peek();
-        if(tail == head) head = null;
+        if(tail == head) {
+            head = null;
+            tail = null;
+        }
         else {
             tail = tail.prev;
             tail.next = null;

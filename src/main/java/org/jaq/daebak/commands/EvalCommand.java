@@ -30,5 +30,10 @@ public class EvalCommand extends CommandTemplate implements CommandExecutor{
     public String usage() {
         return "/eval <item>";
     }
+
+    @Override
+    public String toString(){
+        return "eval";
+    }
     
 }

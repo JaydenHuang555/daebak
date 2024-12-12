@@ -17,3 +17,6 @@ commands:
   eval:
     description: evals shits
     usage: /eval <string>
+  help:
+    description: help command
+    usage: /help

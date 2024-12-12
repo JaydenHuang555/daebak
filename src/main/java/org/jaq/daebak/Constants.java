@@ -706,7 +706,7 @@ public final class Constants {
             adminNames.add("stan");
             adminNames.add("jaq");
             adminNames.add("volcano");
-            adminNames.add("john Doe321");
+            adminNames.add("johnDoe321");
         }
 
     }
