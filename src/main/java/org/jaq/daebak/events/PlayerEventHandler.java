@@ -709,6 +709,7 @@ public class PlayerEventHandler implements Listener {
        Client client = Global.tryToGet(event.getPlayer());
        if(event.getItem().getItemMeta().displayName().toString().contentEquals(ClientPhoneConstants.title)){
           Global.logf("opening phone for client %s", client.name());
+          client.openPhone();
        }
 
     }

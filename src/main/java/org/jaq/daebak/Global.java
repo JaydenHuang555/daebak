@@ -683,6 +683,7 @@ import org.jaq.daebak.client.Client;
 import org.jaq.util.OrderedList;
 import org.jaq.util.PropertyType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -709,16 +710,16 @@ public class Global {
         logf("added player %s to clients", player.getName());
     }
 
-    public static Client tryToGet(@NotNull Player key){
+    public static @Nullable  Client tryToGet(@NotNull Player key){
         if(!clientMap.containsKey(key)) return new Client(null);
         return clientMap.get(key);
     }
 
-    public static Bank getBank(){
+    public static @NotNull Bank getBank(){
         return bank;
     }
 
-    public static Daebak getDaebak(){
+    public static @NotNull  Daebak getDaebak(){
         return daebak;
     }
 
