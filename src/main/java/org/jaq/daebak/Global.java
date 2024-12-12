@@ -675,6 +675,7 @@ the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
+import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.units.qual.N;
@@ -692,6 +693,8 @@ public class Global {
     public final static OrderedList<Client> clients = new OrderedList<>();
     public final static HashMap<Player, Client> clientMap = new HashMap<>();
     public final static Bank bank = new Bank();
+
+    public final static GsonBuilder gsonBuilder = new GsonBuilder();
     
 
     public static Daebak daebak;
@@ -714,6 +717,12 @@ public class Global {
     public static @Nullable  Client tryToGet(@NotNull Player key){
         if(!clientMap.containsKey(key)) return new Client(null);
         return clientMap.get(key);
+    }
+
+    public static @Nullable Client tryToGet(String name){
+        for(int i = 0 ; i < clients.getSize(); i++)
+            if(clients.get(i).name().contentEquals(name)) return clients.get(i);
+        return null;
     }
 
     public static @NotNull Bank getBank(){

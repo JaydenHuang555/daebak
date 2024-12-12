@@ -690,8 +690,10 @@ import org.jaq.util.math.token.operator.SubToken;
 import org.jetbrains.annotations.NotNull;
 import org.jaq.util.math.token.OperandToken;
 
+import java.text.DecimalFormat;
+
 public final class MathEngine<T> {
-    private static enum Type {
+    public static enum Type {
         FLOAT,
         DOUBLE,
         SHORT,
@@ -749,7 +751,6 @@ public final class MathEngine<T> {
                     tokens.add(new OperandToken(builder.toString()));
                     builder = new StringBuilder();
                 }
-                /* meant for handling negatives, suject to change */
                 else if(c == '-'){
                     builder.append(c);
                     break;
@@ -763,7 +764,7 @@ public final class MathEngine<T> {
         return tokens;
     }
     
-    private String eval(@NotNull Type type, @NotNull String eq){
+    private @NotNull String eval(@NotNull Type type, @NotNull String eq, int p){
         tokens = new OrderedList<>();
         operators = new Stack<>();
         tokens = digest(type, eq);
@@ -787,16 +788,18 @@ public final class MathEngine<T> {
                 }
             }
         }
-
-        return stack.pop().toString();
+        StringBuilder decBuilder = new StringBuilder("#.");
+        for(int i = 0; i < p; i++) decBuilder.append("#");
+        DecimalFormat format = new DecimalFormat(decBuilder.toString());
+        return format.format(stack.pop().toString());
     }
 
     public double evalf(@NotNull String eq){
-        return Double.parseDouble(eval(Type.DOUBLE, eq));
+        return Double.parseDouble(eval(Type.DOUBLE, eq, 4));
     }
 
     public double evall(@NotNull String eq){
-        return Long.parseLong(eval(Type.LONG, eq));
+        return Long.parseLong(eval(Type.LONG, eq, 4));
     }
 
 }

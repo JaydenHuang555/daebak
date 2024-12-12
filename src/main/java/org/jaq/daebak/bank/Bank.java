@@ -676,6 +676,9 @@ Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import org.jaq.daebak.Constants;
 import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
@@ -683,6 +686,7 @@ import org.jaq.daebak.client.Money;
 import org.jaq.util.OrderedList;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
@@ -702,9 +706,15 @@ public final class Bank {
             }
         }
     }
+
     private class BankAccount {
         Money bankMoney;
         Client holder;
+
+        protected BankAccount(){
+            this.holder = null;
+            this.bankMoney = new Money();
+        }
 
         public BankAccount(Client holder){
             this.holder = holder;
@@ -713,10 +723,40 @@ public final class Bank {
 
     }
 
+    private class BankAccountTypeAdapter extends TypeAdapter<BankAccount>{
+
+        @Override
+        public void write(JsonWriter writer, BankAccount account) throws IOException {
+            writer.name("bankMoney").value(account.bankMoney.amount);
+            writer.name("holder").value(account.holder.name());
+        }
+
+        @Override
+        public BankAccount read(JsonReader reader) throws IOException {
+            BankAccount account = new BankAccount(null);
+            reader.beginObject();
+            while(reader.hasNext()){
+                String name = reader.nextName();
+                switch(name){
+                    case "bankMoney":
+                        account.bankMoney = new Money(Double.parseDouble(reader.nextString()));
+                        break;
+                    case "holder":
+                        account.holder = Global.tryToGet(reader.nextString());
+                    default:
+                        break;
+                }
+            }
+            reader.endObject();
+            return account;
+        }
+    }
+
     private final HashMap<Client, BankAccount> accounts = new HashMap<>();
     private final OrderedList<BankAccount> accountsList = new OrderedList<>();
 
     public Bank(){
+        Global.gsonBuilder.registerTypeAdapter(BankAccount.class, new BankAccountTypeAdapter());
         new PeriodicThread().start();
     }
 
