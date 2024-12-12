@@ -1,4 +1,7 @@
 package org.jaq.util;
+
+import org.jetbrains.annotations.NotNull;
+
 /*
     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
@@ -679,7 +682,7 @@ public final class Stack<T> {
 
     StackNode head, tail;
 
-    Stack(){
+    public Stack(){
         this.head = null;
         this.tail = null;
     }
@@ -703,7 +706,10 @@ public final class Stack<T> {
     @SuppressWarnings("unchecked")
     public T pop(){
         T val = peek();
-        if(tail == head) head = null;
+        if(tail == head) {
+            head = null;
+            tail = null;
+        }
         else {
             tail = tail.prev;
             tail.next = null;

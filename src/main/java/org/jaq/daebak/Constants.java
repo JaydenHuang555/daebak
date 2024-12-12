@@ -694,6 +694,7 @@ public final class Constants {
         commands.add(new DepositCommand());
         commands.add(new DislayCommand());
         commands.add(new WithDrawCommand());
+        commands.add(new EvalCommand());
         commands.add(new HelpCommand());
     }
 
@@ -705,7 +706,7 @@ public final class Constants {
             adminNames.add("stan");
             adminNames.add("jaq");
             adminNames.add("volcano");
-            adminNames.add("john Doe321");
+            adminNames.add("johnDoe321");
         }
 
     }

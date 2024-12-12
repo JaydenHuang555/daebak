@@ -703,6 +703,7 @@ public final class Daebak extends JavaPlugin {
     /*TODO: add checks for valid command */
     private void initCommands(){
         for(int i = 0; i < Constants.commands.getSize(); i++){
+            Global.logf("registering %s command", Constants.commands.get(i).toString());
             getCommand(Constants.commands.get(i).toString()).setExecutor((CommandExecutor) Constants.commands.get(i));
         }
     }
