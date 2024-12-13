@@ -694,9 +694,6 @@ public class Global {
     public final static HashMap<Player, Client> clientMap = new HashMap<>();
     public final static Bank bank = new Bank();
 
-    public final static GsonBuilder gsonBuilder = new GsonBuilder();
-    
-
     public static Daebak daebak;
     public final static boolean isWindows =
             System.getProperty(PropertyType.OS_NAME.key()) != null &&

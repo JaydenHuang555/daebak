@@ -682,6 +682,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jaq.daebak.client.Client;
 import org.jaq.daebak.Constants.*;
@@ -720,6 +721,12 @@ public class PlayerEventHandler implements Listener {
         if((client.getPlayer()) == null) return;
         if(client.getPlayer().getOpenInventory().title().toString().compareToIgnoreCase(Constants.ClientPhoneConstants.title) == 0)
             client.getClientPhone().handle(event);
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event){
+        if(event.getPlayer() == null) return;
+        Global.getBank().flush();
     }
 
 }

@@ -676,6 +676,7 @@ Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -686,8 +687,7 @@ import org.jaq.daebak.client.Money;
 import org.jaq.util.OrderedList;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.HashMap;
 
 public final class Bank {
@@ -727,8 +727,11 @@ public final class Bank {
 
         @Override
         public void write(JsonWriter writer, BankAccount account) throws IOException {
+            writer.beginObject();
             writer.name("bankMoney").value(account.bankMoney.amount);
             writer.name("holder").value(account.holder.name());
+            writer.endObject();
+            Global.log("writing to json file");
         }
 
         @Override
@@ -756,8 +759,22 @@ public final class Bank {
     private final OrderedList<BankAccount> accountsList = new OrderedList<>();
 
     public Bank(){
-        Global.gsonBuilder.registerTypeAdapter(BankAccount.class, new BankAccountTypeAdapter());
-        new PeriodicThread().start();
+        try {
+            new PeriodicThread().start();
+
+            JsonReader reader = new JsonReader(new FileReader("bank.json"));
+            reader.beginArray();
+            while(reader.hasNext()){
+                BankAccount account = new BankAccountTypeAdapter().read(reader);
+                accountsList.add(account);
+                accounts.put(account.holder, account);
+            }
+            reader.endArray();
+
+        } catch (Exception e){
+            Global.warn(e.toString());
+
+        }
     }
 
     private void put(@NotNull Client client){
@@ -798,21 +815,26 @@ public final class Bank {
         return accounts.get(client).bankMoney;
     }
 
-    public void flush(){
+    public void flush() {
         try {
             String firstCommand = Global.isWindows() ? "powershell -Command rm -bank.json" : "rm -rf bank.json";
-            String secondCommand = Global.isWindows() ? "powershell -Command mv bank.json.bp bank.json" : "mv bank.json.bp bank.json";
 
-            PrintWriter writer = new PrintWriter("bank.json.bp");
-            Gson gson = new Gson();
-            for(int i = 0; i < accountsList.getSize(); i++) gson.toJson(accountsList.get(i), writer);
+            Process p = Runtime.getRuntime().exec(firstCommand);
+            Thread.sleep(2000);
+            if (p.exitValue() != 0) throw new Exception("unable to delete bank.json file");
+
+            JsonWriter writer = new JsonWriter(new FileWriter("bank.json"));
+            writer.beginArray();
+
+            for (int i = 0; i < accountsList.getSize(); i++) {
+                new BankAccountTypeAdapter().write(writer, accountsList.get(i));
+            }
+
+            writer.endArray();
             writer.flush();
             writer.close();
 
-            if(Runtime.getRuntime().exec(firstCommand).exitValue() != 0) throw new Exception("unable to remove bank.json file");
-            if(Runtime.getRuntime().exec(secondCommand).exitValue() != 0) throw new Exception("unable to mv bank.json.bp file to bank.json");
-
-        } catch (Exception e){
+        } catch (Exception e) {
             Global.warn(e.toString());
         }
     }
