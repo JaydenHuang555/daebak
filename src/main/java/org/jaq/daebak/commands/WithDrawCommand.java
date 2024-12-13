@@ -681,11 +681,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
+import org.jetbrains.annotations.NotNull;
 
-public class WithDrawCommand extends CommandTemplate implements CommandExecutor {
+public class WithDrawCommand extends CommandTemplate {
     public WithDrawCommand(){}
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String args[]){
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String args[]){
         Client client = Global.tryToGet((Player) sender);
         if(args.length == 0) {
             client.sendf("usage: %s", usage());
@@ -700,17 +701,17 @@ public class WithDrawCommand extends CommandTemplate implements CommandExecutor 
     }
 
     @Override
-    public String toString(){
+    public @NotNull String toString(){
         return "withdraw";
     }
 
     @Override
-    public String description() {
+    public @NotNull String description() {
         return "withdraws x money from bank";
     }
 
     @Override
-    public String usage() {
+    public @NotNull String usage() {
         return "/withdraw <amount>";
     }
 }

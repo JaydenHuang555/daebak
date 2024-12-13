@@ -684,7 +684,7 @@ import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
 import org.jetbrains.annotations.NotNull;
 
-public class HelpCommand extends CommandTemplate implements CommandExecutor {
+public class HelpCommand extends CommandTemplate {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         Client client = Global.tryToGet((Player) commandSender);
@@ -696,17 +696,17 @@ public class HelpCommand extends CommandTemplate implements CommandExecutor {
     }
 
     @Override
-    public String description() {
+    public @NotNull String description() {
         return "displays all commands useful to the server";
     }
 
     @Override
-    public String usage() {
+    public @NotNull String usage() {
         return "/help";
     }
 
     @Override
-    public String toString(){
+    public @NotNull String toString(){
         return "help";
     }
 }

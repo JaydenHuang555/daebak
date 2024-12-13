@@ -683,10 +683,7 @@ import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
 import org.jetbrains.annotations.NotNull;
 
-public class DepositCommand extends CommandTemplate implements CommandExecutor {
-    public DepositCommand(){
-
-    }
+public class DepositCommand extends CommandTemplate  {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String args[]) {
@@ -705,17 +702,17 @@ public class DepositCommand extends CommandTemplate implements CommandExecutor {
     }
 
     @Override
-    public String toString(){
+    public @NotNull String toString(){
         return "deposit";
     }
 
     @Override
-    public String description() {
+    public @NotNull String description() {
         return "deposits x amount of money into the bank";
     }
 
     @Override
-    public String usage() {
+    public @NotNull String usage() {
         return "/deposit <amount>";
     }
 }

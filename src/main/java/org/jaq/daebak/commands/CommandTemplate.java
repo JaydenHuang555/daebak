@@ -1,4 +1,10 @@
 package org.jaq.daebak.commands;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+
 /*
     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
@@ -675,7 +681,8 @@ the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
-public abstract class CommandTemplate {
-    public abstract String description();
-    public abstract String usage();
+public abstract class CommandTemplate implements CommandExecutor {
+    public abstract @NotNull String description();
+    public abstract @NotNull String usage();
+    public abstract boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String args[]);
 }

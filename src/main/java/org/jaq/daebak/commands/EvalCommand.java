@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 
-public class EvalCommand extends CommandTemplate implements CommandExecutor{
+public class EvalCommand extends CommandTemplate {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -22,17 +22,17 @@ public class EvalCommand extends CommandTemplate implements CommandExecutor{
     }
 
     @Override
-    public String description() {
+    public @NotNull String description() {
         return "evals shit";
     }
 
     @Override
-    public String usage() {
+    public @NotNull String usage() {
         return "/eval <item>";
     }
 
     @Override
-    public String toString(){
+    public @NotNull String toString(){
         return "eval";
     }
     

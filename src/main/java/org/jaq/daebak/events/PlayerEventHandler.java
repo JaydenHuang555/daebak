@@ -693,14 +693,14 @@ public class PlayerEventHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
-        Bukkit.getLogger().info("found player");
+        Global.logf("player %s joined", event.getPlayer().getName());
         Global.addClient(event.getPlayer());
         Client client = Global.tryToGet(event.getPlayer());
 
+        client.send("welcome to daebak");
 
-        client.send("welcome to this server");
-
-        Global.getBank().addAccount(client);
+        Global.getBank().update();
+        if(!Global.getBank().hasAccount(client)) Global.getBank().addAccount(client);
 
     }
 

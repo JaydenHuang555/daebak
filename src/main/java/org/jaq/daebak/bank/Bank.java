@@ -686,6 +686,7 @@ import org.jaq.daebak.client.Client;
 import org.jaq.daebak.client.Money;
 import org.jaq.util.OrderedList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.HashMap;
@@ -701,6 +702,7 @@ public final class Bank {
             try {
                 Thread.sleep(5400000);
                 Global.getBank().flush();
+                Global.getBank().update();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -711,71 +713,24 @@ public final class Bank {
         Money bankMoney;
         Client holder;
 
-        protected BankAccount(){
+        public BankAccount(){
             this.holder = null;
             this.bankMoney = new Money();
         }
 
         public BankAccount(Client holder){
             this.holder = holder;
-            this.bankMoney = new Money(0d);
+            this.bankMoney = new Money();
         }
 
-    }
-
-    private class BankAccountTypeAdapter extends TypeAdapter<BankAccount>{
-
-        @Override
-        public void write(JsonWriter writer, BankAccount account) throws IOException {
-            writer.beginObject();
-            writer.name("bankMoney").value(account.bankMoney.amount);
-            writer.name("holder").value(account.holder.name());
-            writer.endObject();
-            Global.log("writing to json file");
-        }
-
-        @Override
-        public BankAccount read(JsonReader reader) throws IOException {
-            BankAccount account = new BankAccount(null);
-            reader.beginObject();
-            while(reader.hasNext()){
-                String name = reader.nextName();
-                switch(name){
-                    case "bankMoney":
-                        account.bankMoney = new Money(Double.parseDouble(reader.nextString()));
-                        break;
-                    case "holder":
-                        account.holder = Global.tryToGet(reader.nextString());
-                        break;
-                    default:
-                        break;
-                }
-            }
-            reader.endObject();
-            return account;
-        }
     }
 
     private final HashMap<Client, BankAccount> accounts = new HashMap<>();
     private final OrderedList<BankAccount> accountsList = new OrderedList<>();
 
     public Bank(){
-        try {
-            new PeriodicThread().start();
-
-            JsonReader reader = new JsonReader(new FileReader("bank.json"));
-            reader.beginArray();
-            while(reader.hasNext()){
-                BankAccount account = new BankAccountTypeAdapter().read(reader);
-                accountsList.add(account);
-                accounts.put(account.holder, account);
-            }
-            reader.endArray();
-
-        } catch (Exception e){
-            Global.warn(e.toString());
-
-        }
+        new PeriodicThread().start();
+        this.update();
     }
 
     private void put(@NotNull Client client){
@@ -812,8 +767,37 @@ public final class Bank {
         withDraw(client, money.amount);
     }
 
-    public Money getHeldMoney(@NotNull Client client){
+    public @NotNull Money getHeldMoney(@NotNull Client client){
         return accounts.get(client).bankMoney;
+    }
+
+    public boolean hasAccount(Client client){
+        return accounts.containsKey(client);
+    }
+
+    public void update(){
+        try {
+            JsonReader reader = new JsonReader(new FileReader("bank.json"));
+            reader.beginArray();
+            while (reader.hasNext()){
+                BankAccount account = new BankAccount();
+                String name = reader.nextName();
+                if(accounts.containsKey(Global.tryToGet(name))) break;
+                switch(name){
+                    case "holder":
+                        account.holder = Global.tryToGet(reader.nextString());
+                        break;
+                    case "amount":
+                        account.bankMoney = new Money(reader.nextDouble());
+                        accounts.put(account.holder, account);
+                        accountsList.add(account);
+                        break;
+                    default: throw new Exception(String.format("unable to recognize %s", name));
+                }
+            }
+        } catch (Exception e){
+            Global.warnf("unable to update bank due to %s", e.toString());
+        }
     }
 
     public void flush() {
@@ -828,7 +812,13 @@ public final class Bank {
             writer.beginArray();
 
             for (int i = 0; i < accountsList.getSize(); i++) {
-                new BankAccountTypeAdapter().write(writer, accountsList.get(i));
+                BankAccount account = accountsList.get(i);
+                writer.beginObject()
+                        .name("holder")
+                        .value(account.holder.name())
+                        .name("amount")
+                        .value(account.bankMoney.amount)
+                ;
             }
 
             writer.endArray();

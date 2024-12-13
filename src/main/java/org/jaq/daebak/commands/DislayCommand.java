@@ -682,11 +682,12 @@ import org.bukkit.entity.Player;
 import org.jaq.daebak.Constants;
 import org.jaq.daebak.Global;
 import org.jaq.daebak.client.Client;
+import org.jetbrains.annotations.NotNull;
 
-public class DislayCommand extends CommandTemplate implements CommandExecutor {
+public class DislayCommand extends CommandTemplate {
     public DislayCommand(){}
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String args[]){
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String args[]){
         Client client = Global.tryToGet((Player) sender);
         try {
             client.send(String.format("the bank has %s%f", Constants.currencySymbol, Global.getBank().getHeldMoney(client).amount));
@@ -698,17 +699,17 @@ public class DislayCommand extends CommandTemplate implements CommandExecutor {
     }
 
     @Override
-    public String toString(){
+    public @NotNull String toString(){
         return "display";
     }
 
     @Override
-    public String description() {
+    public @NotNull String description() {
         return "displays money in bank and personal";
     }
 
     @Override
-    public String usage() {
+    public @NotNull String usage() {
         return "/display";
     }
 }
