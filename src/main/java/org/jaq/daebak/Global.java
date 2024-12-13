@@ -677,7 +677,6 @@ Public License instead of this License.  But first, please read
  */
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.units.qual.N;
 import org.jaq.daebak.bank.Bank;
 import org.jaq.daebak.client.Client;
 import org.jaq.util.OrderedList;
