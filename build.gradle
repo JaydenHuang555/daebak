@@ -11,16 +11,25 @@ java {
     }
 }
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs += [
+            '--add-exports', 'jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
+           //  '--add-opens', 'jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED'
+    ]
+}
+
 repositories {
     mavenCentral()
     maven {
         url = 'https://repo.papermc.io/repository/maven-public/'
     }
+    maven {
+        url = 'https://jitpack.io'
+    }
 }
 
 dependencies {
     implementation 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
-}
-dependencies {
-    implementation  'com.google.code.gson:gson:2.11.0'
+    implementation 'com.google.code.gson:gson:2.11.0'
+  //   implementation 'com.github.blackbeard334:jops:master-SNAPSHOT'
 }
