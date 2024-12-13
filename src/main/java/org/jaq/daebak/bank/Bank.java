@@ -746,6 +746,7 @@ public final class Bank {
                         break;
                     case "holder":
                         account.holder = Global.tryToGet(reader.nextString());
+                        break;
                     default:
                         break;
                 }
