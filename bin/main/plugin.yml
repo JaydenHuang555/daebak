@@ -14,8 +14,9 @@ commands:
     usage: /display
   withdraw:
     description: withdraws arg[0] amount of money
-    usage: /withdraw <amount>
   eval:
     description: evals shits
     usage: /eval <string>
-
+  help:
+    description: help command
+    usage: /help

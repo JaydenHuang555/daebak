@@ -16,12 +16,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jaq.util.math.token.OperandToken;
 
 public final class MathEngine<T> {
+
+
+    private OrderedList<Token> digested = null;
+
     private static enum Type {
         DOUBLE,
         LONG
     }
-    private OrderedList<Token> tokens;
-    private Stack<OperatorToken> operators;
 
     private OperatorToken getOperatorTokenType(char c){
         switch(c){
@@ -43,11 +45,14 @@ public final class MathEngine<T> {
             case '/':
             case '%':
                 return 2;
+            case '^':
+                return 3;    
             default: return 0;
         }
     }
 
     private OrderedList<Token> digest(@NotNull Type type, @NotNull String eq){
+        Stack<OperatorToken> operators = new Stack<>();
         StringBuilder builder = new StringBuilder();
         for(int i = 0; i < eq.length(); i++){
             char c = eq.charAt(i);
@@ -58,9 +63,9 @@ public final class MathEngine<T> {
                 Global.logf("appending %c to builder", c);
                 builder.append(c);
             }
-            if(!isNum){
+            if(prec(c) != 0){
                 if(builder.length() > 0){
-                    tokens.add(new OperandToken(builder.toString()));
+                    digested.add(new OperandToken(builder.toString()));
                     builder = new StringBuilder();
                     Global.logf("appending %s", builder.toString());
                 }
@@ -72,35 +77,35 @@ public final class MathEngine<T> {
                 }
                 Global.logf("handling operator %c", c);
                 while(!operators.isEmpty() && operators.peek().prec() >= prec(c))
-                    tokens.add(operators.pop());
+                    digested.add(operators.pop());
                 operators.push(getOperatorTokenType(c));
             }
             
         }
-        if(!builder.isEmpty()) tokens.add(new OperandToken(builder.toString()));
-        while(!operators.isEmpty()) tokens.add(operators.pop());
-        for(int i = 0; i < tokens.getSize(); i++) Global.logf("token at %d is %s", i, tokens.get(i).toString());
-        return tokens;
+        if(!builder.isEmpty()) digested.add(new OperandToken(builder.toString()));
+        while(!operators.isEmpty()) digested.add(operators.pop());
+        for(int i = 0; i < digested.getSize(); i++) Global.logf("token at %d is %s", i, digested.get(i).toString());
+        return digested;
     }
     
     private String eval(@NotNull Type type, @NotNull String eq){
-        tokens = new OrderedList<>();
+        digested = new OrderedList<>();
         operators = new Stack<>();
-        tokens = digest(type, eq);
+        digested = digest(type, eq);
         Stack<OperandToken> stack = new Stack<>();
-        Global.logf("tokens size is %d", tokens.getSize());
+        Global.logf("tokens size is %d", digested.getSize());
 
-        for(int i = 0; i < tokens.getSize(); i++){
-            if(tokens.get(i) instanceof OperandToken) stack.push((OperandToken)tokens.get(i));
-            if(tokens.get(i) instanceof OperatorToken){
+        for(int i = 0; i < digested.getSize(); i++){
+            if(digested.get(i) instanceof OperandToken) stack.push((OperandToken)digested.get(i));
+            if(digested.get(i) instanceof OperatorToken){
                 OperandToken right = stack.pop();
                 OperandToken left = stack.pop();
                 switch(type){
                     case DOUBLE:
-                        stack.push(((OperatorToken)tokens.get(i)).evalf(right, left));
+                        stack.push(((OperatorToken)digested.get(i)).evalf(right, left));
                         break;
                     case LONG:
-                        stack.push(((OperatorToken)tokens.get(i)).evall(right, left));
+                        stack.push(((OperatorToken)digested.get(i)).evall(right, left));
                         break;
                     default:
                         break;
