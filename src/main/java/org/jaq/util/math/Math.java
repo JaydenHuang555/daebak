@@ -8,7 +8,7 @@ import org.jaq.util.Stack;
 
 public class Math {
 
-    protected final static MathEngine<Double> engine = new MathEngine<>();
+    private final static MathEngine<Double> engine = new MathEngine<>();
     
     public static double evalf(@NotNull String eq){
         return engine.evalf(eq);
