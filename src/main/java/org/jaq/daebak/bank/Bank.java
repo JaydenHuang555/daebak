@@ -727,6 +727,8 @@ public final class Bank {
 
     private final HashMap<Client, BankAccount> accounts = new HashMap<>();
     private final OrderedList<BankAccount> accountsList = new OrderedList<>();
+    /* meant for handling calls from different threads */
+    private boolean isUpdating, isFlushing;
 
     public Bank(){
         new PeriodicThread().start();
@@ -777,6 +779,8 @@ public final class Bank {
 
     public void update(){
         try {
+            if(isUpdating) return;
+            isUpdating = !isUpdating;
             JsonReader reader = new JsonReader(new FileReader("bank.json"));
             reader.beginArray();
             while (reader.hasNext()){
@@ -798,10 +802,13 @@ public final class Bank {
         } catch (Exception e){
             Global.warnf("unable to update bank due to %s", e.toString());
         }
+        isUpdating = !isUpdating;
     }
 
     public void flush() {
         try {
+            if(isFlushing) return;
+            isFlushing = !isFlushing;
             String firstCommand = Global.isWindows() ? "powershell -Command rm -bank.json" : "rm -rf bank.json";
 
             Process p = Runtime.getRuntime().exec(firstCommand);
@@ -828,6 +835,7 @@ public final class Bank {
         } catch (Exception e) {
             Global.warn(e.toString());
         }
+        isFlushing = !isFlushing;
     }
 
 }
