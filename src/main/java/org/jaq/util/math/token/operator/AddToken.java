@@ -20,6 +20,11 @@ public class AddToken extends OperatorToken {
     }
 
     @Override
+    public OperandToken evalh(@NotNull OperandToken a, @NotNull OperandToken b){
+        return new OperandToken(a.valh() + b.valh());
+    }
+
+    @Override
     public OperandToken evall(@NotNull OperandToken a, @NotNull OperandToken b){
         return new OperandToken(a.vall() + b.vall());
     }

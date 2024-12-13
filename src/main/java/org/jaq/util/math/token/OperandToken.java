@@ -14,6 +14,10 @@ public class OperandToken extends Token {
         return Double.parseDouble(val);
     }
 
+    public short valh(){
+        return Short.parseShort(val);
+    }
+
     public long vall(){
         return Long.parseLong(val);
     }

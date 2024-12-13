@@ -695,6 +695,13 @@ public class StringBuilder {
         this.buff = new char[this.cap];
     }
 
+    public StringBuilder(String str){
+        this.cap = 1 << 3;
+        this.len = 0;
+        this.buff = new char[this.cap];
+        for(int i = 0; i < str.length(); i++) append(str.charAt(i));
+    }
+
     public void append(char c){
         buff[len++] = c;
         if(len == cap) resize();
@@ -711,6 +718,15 @@ public class StringBuilder {
     public void insert(char c, int index){
         if(index >= cap) resize();
         buff[index] = c;        
+    }
+
+
+    public int length(){
+        return len;
+    }
+
+    public boolean isEmpty(){
+        return len == 0;
     }
 
     @Override
