@@ -1,4 +1,4 @@
-package org.jaq.daebak;
+package org.jaq.util;
 /*
     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
@@ -675,91 +675,47 @@ the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
-import com.google.gson.GsonBuilder;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.jaq.daebak.bank.Bank;
-import org.jaq.daebak.client.Client;
-import org.jaq.util.OrderedList;
-import org.jaq.util.PropertyType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.logging.Level;
+public class StringBuilder {
+    
+    private char buff[];
+    private int len, cap;
 
-public class Global {
-    public final static OrderedList<Client> clients = new OrderedList<>();
-    public final static HashMap<Player, Client> clientMap = new HashMap<>();
-    public final static Bank bank = new Bank();
 
-    public static Daebak daebak;
-    public final static boolean isWindows =
-            System.getProperty(PropertyType.OS_NAME.key()) != null &&
-            System.getProperty(PropertyType.OS_NAME.key()).contains("win");
-
-    public final static boolean isWindows(){
-        return isWindows;
+    private void resize(){
+        char next[] = new char[cap *= 2];
+        for(int i = 0; i < cap / 2; i++) next[i] = buff[i];
+        buff = next;
     }
 
-
-    public static void addClient(@NotNull Player player){
-        Client client = new Client(player);
-        clients.add(client);
-        clientMap.put(player, client);
-        logf("added player %s to clients", player.getName());
+    public StringBuilder(){
+        this.cap = 1 << 3;
+        this.len = 0;
+        this.buff = new char[this.cap];
     }
 
-    public static @NotNull  Client tryToGet(@NotNull Player key){
-        if(!clientMap.containsKey(key)) return new Client(null);
-        return clientMap.get(key);
+    public void append(char c){
+        buff[len++] = c;
+        if(len == cap) resize();
     }
 
-    public static @NotNull Client tryToGet(String name){
-        for(int i = 0 ; i < clients.getSize(); i++)
-            if(clients.get(i).name().contentEquals(name)) return clients.get(i);
-        return new Client(null);
+    public void append(@NotNull String s){
+        for(int i = 0; i < s.length(); i++) append(s.charAt(i));
     }
 
-    public static @NotNull Bank getBank(){
-        return bank;
+    public void append(@NotNull Object obj){
+        append(obj.toString());
     }
 
-    public static @NotNull  Daebak getDaebak(){
-        return daebak;
+    public void insert(char c, int index){
+        if(index >= cap) resize();
+        buff[index] = c;        
     }
 
-    public static void log(@NotNull Level level, @NotNull String s){
-        Bukkit.getLogger().log(level, s);
-        for(int i = 0; i < clients.getSize(); i++)
-            if(clients.get(i).isOp()) clients.get(i).sendf("console: %s", s);
-    }
-
-    public static void broadCast(@NotNull String message){
-        for(int i = 0; i < clients.getSize(); i++){
-            clients.get(i).sendf(message);
-        }
-    }
-
-    public static void broadCastf(@NotNull String message, Object ...args){
-        broadCast(String.format(message, args));
-    }
-
-    public static void log(@NotNull String s){
-        log(Level.INFO, s);
-    }
-
-    @SafeVarargs
-    public static void logf(@NotNull String format, Object ...args){
-        log(String.format(format, args));
-    }
-
-    public static void warn(@NotNull String s){
-        log(Level.WARNING, s);
-    }
-
-    public static void warnf(@NotNull String format, Object ... args){
-        warn(String.format(format, args));
+    @Override
+    public String toString(){
+        return new String(buff);
     }
 
 }

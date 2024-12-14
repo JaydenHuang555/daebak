@@ -721,20 +721,10 @@ public final class MathEngine<T> {
                 return 1;
             case '*':
             case '/':
+            case '%':
                 return 2;
             default: return 0;
         }
-    }
-
-    private void handleOperator(char c){
-        if(operators.isEmpty()){
-            operators.push(getOperatorTokenType(c));
-        }
-        else {
-            while(!operators.isEmpty() && operators.peek().prec() >= prec(c)) tokens.add(operators.pop());
-            operators.push(getOperatorTokenType(c));
-        }
-
     }
 
     private OrderedList<Token> digest(@NotNull Type type, @NotNull String eq){
@@ -755,7 +745,10 @@ public final class MathEngine<T> {
                     builder.append(c);
                     break;
                 }
-                handleOperator(c);
+                Global.logf("handling operator %c", c);
+                while(!operators.isEmpty() && operators.peek().prec() >= prec(c))
+                    tokens.add(operators.pop());
+                operators.push(getOperatorTokenType(c));
             }
             
         }
