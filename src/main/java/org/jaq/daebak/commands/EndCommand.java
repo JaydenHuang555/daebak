@@ -11,25 +11,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class EndCommand extends CommandTemplate {
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if(isOnlyOp() && !((Player)commandSender).isOp()) return false;
-        while(true){
-            try {
-                Global.broadCastf("ending in %d seconds", 5);
+    public boolean handle(@NotNull Client client, @NotNull String label, @NotNull String args[]){
+        try {
+            for (int i = 0; i < 5; i++) {
                 Thread.sleep(1000);
-                Global.broadCastf("ending in %d seconds", 4);
-                Thread.sleep(1000);
-                Global.broadCastf("ending in %d seconds", 3);
-                Thread.sleep(1000);
-                Global.broadCastf("ending in %d seconds", 2);
-                Thread.sleep(1000);
-                Global.broadCastf("ending in %d seconds", 1);
-                Thread.sleep(1000);
-                Bukkit.getServer().shutdown();
-                break;
-            } catch (Exception e){
-                Bukkit.getServer().shutdown();
+                Global.broadCastf("ending in %d seconds", 5 - i);
             }
+        } catch (Exception e){
+            Global.warnf(e.toString());
         }
         return true;
     }

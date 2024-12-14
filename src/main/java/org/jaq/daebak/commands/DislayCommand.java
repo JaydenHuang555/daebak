@@ -697,6 +697,10 @@ public class DislayCommand extends CommandTemplate {
         }
         return true;
     }
+    @Override
+    public boolean handle(@NotNull Client client, @NotNull String label, @NotNull String args[]){
+        return true;
+    }
 
     @Override
     public @NotNull String toString(){

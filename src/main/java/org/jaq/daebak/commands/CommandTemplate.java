@@ -3,6 +3,9 @@ package org.jaq.daebak.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jaq.daebak.Global;
+import org.jaq.daebak.client.Client;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -685,7 +688,12 @@ public abstract class CommandTemplate implements CommandExecutor {
 
     public abstract @NotNull String description();
     public abstract @NotNull String usage();
-    public abstract boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String args[]);
+    public final boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String args[]){
+        return handle(Global.tryToGet((Player) commandSender), s, args);
+    }
+
+    public abstract boolean handle(@NotNull Client client, @NotNull String label, @NotNull String args[]);
+
 
 
     public boolean isOnlyOp(){
