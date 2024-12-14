@@ -708,6 +708,7 @@ public class PlayerEventHandler implements Listener {
     public void onPlayerClickEvent(PlayerInteractEvent event){
        if(event.getPlayer() == null) return;
        Client client = Global.tryToGet(event.getPlayer());
+       if(!event.getAction().isRightClick() && event.getItem() == null) return;
        if(event.getItem().getItemMeta().displayName().toString().contentEquals(ClientPhoneConstants.title)){
           Global.logf("opening phone for client %s", client.name());
           client.openPhone();
@@ -725,7 +726,6 @@ public class PlayerEventHandler implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
-        if(event.getPlayer() == null) return;
         Global.getBank().flush();
     }
 

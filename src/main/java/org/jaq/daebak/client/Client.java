@@ -694,9 +694,11 @@ public class Client {
     private final ClientPhone phone;
 
     private final Stats stats;
+    private final String name;
 
     public Client(@NotNull Player player){
         Global.logf("creating new client %s", player.getName());
+        this.name = player.getName();
         this.player = player;
         this.phone = new ClientPhone(this);
         this.stats = new Stats();
@@ -758,13 +760,13 @@ public class Client {
         return player.isOp();
     }
 
-    public String name(){
-        return player.getName();
+    public @NotNull String name(){
+        return name;
     }
 
     @Override
-    public String toString(){
-        return player.getName();
+    public @NotNull String toString(){
+        return name;
     }
 
     public class Stats {

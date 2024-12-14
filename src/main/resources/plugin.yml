@@ -17,6 +17,15 @@ commands:
   eval:
     description: evals shits
     usage: /eval <string>
-  help:
-    description: help command
-    usage: /help
+  flush:
+    description: flushes bank
+    usage: /flush
+  update:
+    description: updates bank
+    usage: /update
+  end:
+    description: ends server
+    usage: /end
+  #help:
+   # description: help command
+   # usage: /help

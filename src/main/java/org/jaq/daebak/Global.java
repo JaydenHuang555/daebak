@@ -711,15 +711,15 @@ public class Global {
         logf("added player %s to clients", player.getName());
     }
 
-    public static @Nullable  Client tryToGet(@NotNull Player key){
+    public static @NotNull  Client tryToGet(@NotNull Player key){
         if(!clientMap.containsKey(key)) return new Client(null);
         return clientMap.get(key);
     }
 
-    public static @Nullable Client tryToGet(String name){
+    public static @NotNull Client tryToGet(String name){
         for(int i = 0 ; i < clients.getSize(); i++)
             if(clients.get(i).name().contentEquals(name)) return clients.get(i);
-        return null;
+        return new Client(null);
     }
 
     public static @NotNull Bank getBank(){
@@ -734,6 +734,16 @@ public class Global {
         Bukkit.getLogger().log(level, s);
         for(int i = 0; i < clients.getSize(); i++)
             if(clients.get(i).isOp()) clients.get(i).sendf("console: %s", s);
+    }
+
+    public static void broadCast(@NotNull String message){
+        for(int i = 0; i < clients.getSize(); i++){
+            clients.get(i).sendf(message);
+        }
+    }
+
+    public static void broadCastf(@NotNull String message, Object ...args){
+        broadCast(String.format(message, args));
     }
 
     public static void log(@NotNull String s){

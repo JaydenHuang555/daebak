@@ -1,4 +1,4 @@
-package org.jaq.daebak;
+package org.jaq.daebak.commands;
 /*
     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
@@ -675,63 +675,49 @@ the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.command.CommandExecutor;
-import org.jaq.daebak.commands.*;
-import org.jaq.util.OrderedList;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jaq.daebak.Constants;
+import org.jaq.daebak.Global;
+import org.jaq.daebak.client.Client;
+import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
+public class FlushCommand extends CommandTemplate {
 
-public final class Constants {
-    public static Location spawnPointLocation = new Location(Bukkit.getWorld(""), 0.0, 0.0, 0.0);
-    public final static OrderedList<CommandTemplate> commands = new OrderedList<>();
-
-    public final static String currencySymbol = "₩";
-
-    static {
-        commands.add(new DepositCommand());
-        commands.add(new DislayCommand());
-        commands.add(new WithDrawCommand());
-        commands.add(new EvalCommand());
-        commands.add(new UpdateCommand());
-        commands.add(new FlushCommand());
-        commands.add(new EndCommand());
-        // commands.add(new HelpCommand());
-    }
-
-    public final class AdminConstants {
-        public final static OrderedList<String> adminNames = new OrderedList<>();
-
-        static {
-            adminNames.add("reavontsg");
-            adminNames.add("stan");
-            adminNames.add("jaq");
-            adminNames.add("volcano");
-            adminNames.add("johnDoe321");
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String args[]){
+        Client client = Global.tryToGet((Player) sender);
+        if(isOnlyOp() && !Global.tryToGet((Player) sender).isOp()) {
+            Global.tryToGet((Player) sender).send("u are not oped");
+            return false;
         }
-
+        try {
+            Global.getBank().flush();
+        } catch (Exception e){
+            Global.warn(e.toString());
+        }
+        return true;
     }
 
-    public final class ClientPhoneConstants {
-        public static String title = "Phone";
+    @Override
+    public @NotNull String toString(){
+        return "flush";
     }
 
-
-
-    public final class BankAppConstants {
-        public static Material MATERIAL = Material.RED_DYE;
-        public static String NAME = "Bank";
-
-        public final static String INV_TITLE = "BankApp";
-        public final static String WITHDRAW_TITLE = "withdraw";
-        public final static String DEPOSIT_TITLE  = "deposit";
+    @Override
+    public @NotNull String description() {
+        return "flushes bank";
     }
 
-    public final class StatusAppConstants {
-        public static Material MATERIAL = Material.BLUE_DYE;
-        public static String NAME = "Status";
+    @Override
+    public @NotNull String usage() {
+        return "/flush";
+    }
+
+    @Override
+    public boolean isOnlyOp(){
+        return true;
     }
 
 }

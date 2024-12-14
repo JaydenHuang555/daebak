@@ -700,7 +700,7 @@ public final class Bank {
         @Override
         public void run(){
             try {
-                Thread.sleep(5400000);
+                Thread.sleep(5000);
                 Global.getBank().flush();
                 Global.getBank().update();
             } catch (InterruptedException e) {
@@ -731,7 +731,7 @@ public final class Bank {
     private boolean isUpdating, isFlushing;
 
     public Bank(){
-        new PeriodicThread().start();
+       // new PeriodicThread().start();
         this.update();
     }
 
@@ -739,6 +739,7 @@ public final class Bank {
         BankAccount account = new BankAccount(client);
         accounts.put(client, account);
         accountsList.add(account);
+        flush();
     }
 
     public void addAccount(@NotNull Client client){
@@ -777,55 +778,79 @@ public final class Bank {
         return accounts.containsKey(client);
     }
 
+
+
+
     public void update(){
         try {
             if(isUpdating) return;
             isUpdating = !isUpdating;
+            Global.logf("updating bank");
             JsonReader reader = new JsonReader(new FileReader("bank.json"));
             reader.beginArray();
-            while (reader.hasNext()){
+            while(reader.hasNext()){
+                reader.beginObject();
                 BankAccount account = new BankAccount();
-                String name = reader.nextName();
-                if(accounts.containsKey(Global.tryToGet(name))) break;
-                switch(name){
-                    case "holder":
-                        account.holder = Global.tryToGet(reader.nextString());
-                        break;
-                    case "amount":
-                        account.bankMoney = new Money(reader.nextDouble());
-                        accounts.put(account.holder, account);
-                        accountsList.add(account);
-                        break;
-                    default: throw new Exception(String.format("unable to recognize %s", name));
+                while(reader.hasNext()){
+                    switch(reader.nextName()){
+                        case "holder":
+                            account.holder = Global.tryToGet(reader.nextString());
+                            Global.logf("found holder %s", account.holder.name());
+                            break;
+                        case "bankMoney":
+                            account.bankMoney.amount = reader.nextDouble();
+                            Global.logf("found amount %f", account.bankMoney.amount);
+                            break;
+                    }
                 }
+                reader.endObject();
+                for(int i = 0; i < accountsList.getSize(); i++){
+                    if(accountsList.get(i).holder.name().contentEquals(account.holder.name())){
+                        accountsList.insert(i, account);
+                    }
+                }
+                try {
+                    accounts.remove(account.holder);
+                } catch (Exception e){}
+                accounts.put(account.holder, account);
+
+
             }
+            reader.endArray();
+            reader.close();
         } catch (Exception e){
             Global.warnf("unable to update bank due to %s", e.toString());
         }
         isUpdating = !isUpdating;
     }
 
+
     public void flush() {
         try {
             if(isFlushing) return;
             isFlushing = !isFlushing;
+            Global.logf("flushing bank");
             String firstCommand = Global.isWindows() ? "powershell -Command rm -bank.json" : "rm -rf bank.json";
-
-            Process p = Runtime.getRuntime().exec(firstCommand);
-            Thread.sleep(2000);
-            if (p.exitValue() != 0) throw new Exception("unable to delete bank.json file");
-
+/*
+            Process process = Runtime.getRuntime().exec(firstCommand);
+            process.waitFor();
+*/
             JsonWriter writer = new JsonWriter(new FileWriter("bank.json"));
             writer.beginArray();
-
+            Global.logf("%d", accountsList.getSize());
             for (int i = 0; i < accountsList.getSize(); i++) {
                 BankAccount account = accountsList.get(i);
                 writer.beginObject()
                         .name("holder")
-                        .value(account.holder.name())
-                        .name("amount")
+                        .value(account.holder.name());
+                Global.logf("flushing holder %s", account.holder.name());
+
+                writer
+                        .name("bankMoney")
                         .value(account.bankMoney.amount)
                 ;
+                Global.logf("flushing amount %f", account.bankMoney.amount);
+                writer.endObject();
             }
 
             writer.endArray();

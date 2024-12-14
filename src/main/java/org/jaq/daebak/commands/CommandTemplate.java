@@ -682,7 +682,13 @@ Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
  */
 public abstract class CommandTemplate implements CommandExecutor {
+
     public abstract @NotNull String description();
     public abstract @NotNull String usage();
     public abstract boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String args[]);
+
+
+    public boolean isOnlyOp(){
+        return false;
+    }
 }

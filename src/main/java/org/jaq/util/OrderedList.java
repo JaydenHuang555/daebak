@@ -694,6 +694,11 @@ public class OrderedList<T> {
             subList = next;
         }
     }
+
+    public void insert(int index, T item){
+        subList[index] = item;
+    }
+
     @SuppressWarnings("unchecked")
     public T get(int index){
         if(index > size || index < 0) throw new InvalidIndexException(index);
