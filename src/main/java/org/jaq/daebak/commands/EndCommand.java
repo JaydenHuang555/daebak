@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class EndCommand extends CommandTemplate {
     @Override
-    public boolean handle(@NotNull Client client, @NotNull String label, @NotNull String args[]){
+    public boolean handle(@NotNull Client client, @NotNull String args[]){
         try {
             for (int i = 0; i < 5; i++) {
                 Thread.sleep(1000);

@@ -685,20 +685,15 @@ import org.jaq.daebak.client.Client;
 import org.jetbrains.annotations.NotNull;
 
 public class DislayCommand extends CommandTemplate {
-    public DislayCommand(){}
+
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String args[]){
-        Client client = Global.tryToGet((Player) sender);
+    public boolean handle(@NotNull Client client, @NotNull String args[]){
         try {
             client.send(String.format("the bank has %s%f", Constants.currencySymbol, Global.getBank().getHeldMoney(client).amount));
             client.send(String.format("you have %s%f", Constants.currencySymbol, client.getStats().money.amount));
         } catch (Exception e){
             Global.warn(e.toString());
         }
-        return true;
-    }
-    @Override
-    public boolean handle(@NotNull Client client, @NotNull String label, @NotNull String args[]){
         return true;
     }
 

@@ -686,16 +686,16 @@ import org.jetbrains.annotations.NotNull;
 public class FlushCommand extends CommandTemplate {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String args[]){
-        Client client = Global.tryToGet((Player) sender);
-        if(isOnlyOp() && !Global.tryToGet((Player) sender).isOp()) {
-            Global.tryToGet((Player) sender).send("u are not oped");
+    public boolean handle(@NotNull Client client, @NotNull String args[]){
+        if(isOnlyOp() && !client.isOp()){
+            client.sendf("client %s is not an op", client.name());
             return false;
         }
         try {
             Global.getBank().flush();
         } catch (Exception e){
             Global.warn(e.toString());
+            return false;
         }
         return true;
     }

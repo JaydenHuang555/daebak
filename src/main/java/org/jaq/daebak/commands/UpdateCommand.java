@@ -680,6 +680,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jaq.daebak.Global;
+import org.jaq.daebak.client.Client;
 import org.jaq.util.math.Math;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.tokens.ScalarToken;
@@ -687,15 +688,16 @@ import org.yaml.snakeyaml.tokens.ScalarToken;
 public class UpdateCommand extends CommandTemplate {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(!((Player)sender).isOp()){
-            Global.tryToGet((Player) sender).send("you are not oped");
+    public boolean handle(@NotNull Client client, String args[]){
+        if(isOnlyOp() && !client.isOp()){
+            Global.warnf("client %s is not op", client.name());
             return false;
         }
         try {
             Global.getBank().update();
         } catch (Exception e){
             Global.warnf(e.toString());
+            return false;
         }
         return true;
     }

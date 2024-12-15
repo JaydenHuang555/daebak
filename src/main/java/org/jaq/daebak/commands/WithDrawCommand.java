@@ -684,11 +684,10 @@ import org.jaq.daebak.client.Client;
 import org.jetbrains.annotations.NotNull;
 
 public class WithDrawCommand extends CommandTemplate {
-    public WithDrawCommand(){}
+
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String args[]){
-        Client client = Global.tryToGet((Player) sender);
-        if(args.length == 0) {
+    public boolean handle(@NotNull Client client, @NotNull String args[]){
+        if(args.length == 0){
             client.sendf("usage: %s", usage());
             return false;
         }

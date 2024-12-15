@@ -685,14 +685,14 @@ import org.jaq.daebak.client.Client;
 import org.jetbrains.annotations.NotNull;
 
 public class HelpCommand extends CommandTemplate {
+
+    public HelpCommand(){
+        throw new RuntimeException("help command is not implemented");
+    }
+
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        Client client = Global.tryToGet((Player) commandSender);
-        for(int i = 0; i < Constants.commands.getSize(); i++){
-            CommandTemplate com = Constants.commands.get(i);
-            client.sendf("name: %s, usage: %s, description: %s", com.toString(), com.usage(), com.description());
-        }
-        return true;
+    public boolean handle(@NotNull Client client, @NotNull String args[]){
+        throw new RuntimeException("help command is not implemented");
     }
 
     @Override
@@ -710,3 +710,5 @@ public class HelpCommand extends CommandTemplate {
         return "help";
     }
 }
+
+

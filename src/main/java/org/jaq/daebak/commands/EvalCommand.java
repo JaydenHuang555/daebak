@@ -679,6 +679,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jaq.daebak.client.Client;
 import org.jaq.util.math.Math;
 import org.jetbrains.annotations.NotNull;
 
@@ -687,12 +688,12 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 public class EvalCommand extends CommandTemplate {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean handle(@NotNull Client client, @NotNull String args[]){
         if(args.length == 0){
-            ((Player)sender).sendMessage("usage: %s", usage());
-            return false;            
+            client.sendf("client %s is not an op", client.name());
+            return false;
         }
-        ((Player)sender).sendMessage(String.valueOf(Math.evalf(args[0])));
+        client.sendf("%f", Math.evalf(args[0]));
         return true;
     }
 

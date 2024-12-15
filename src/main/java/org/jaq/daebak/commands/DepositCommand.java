@@ -686,14 +686,13 @@ import org.jetbrains.annotations.NotNull;
 public class DepositCommand extends CommandTemplate  {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String args[]) {
+    public boolean handle(@NotNull Client client, @NotNull String args[]){
         try {
-            Client sender = Global.tryToGet((Player) commandSender);
             if(args.length == 0){
-                sender.sendf("usage: %s", usage());
+                client.sendf("usage: %s", usage());
                 return false;
             }
-            sender.deposit(Double.parseDouble(args[0]));
+            client.deposit(Double.parseDouble(args[0]));
         } catch (Exception e){
             Global.warn(e.toString());
             return false;

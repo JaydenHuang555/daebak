@@ -689,10 +689,10 @@ public abstract class CommandTemplate implements CommandExecutor {
     public abstract @NotNull String description();
     public abstract @NotNull String usage();
     public final boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String args[]){
-        return handle(Global.tryToGet((Player) commandSender), s, args);
+        return handle(Global.tryToGet((Player) commandSender), args);
     }
 
-    public abstract boolean handle(@NotNull Client client, @NotNull String label, @NotNull String args[]);
+    public abstract boolean handle(@NotNull Client client, @NotNull String args[]);
 
 
 
