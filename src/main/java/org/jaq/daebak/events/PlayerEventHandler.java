@@ -713,7 +713,6 @@ public class PlayerEventHandler implements Listener {
           Global.logf("opening phone for client %s", client.name());
           client.openPhone();
        }
-
     }
 
     @EventHandler
