@@ -684,7 +684,7 @@ public final class Money {
         this.amount = 0d;
     }
 
-    public Money(double amount){
+    public Money(final double amount){
         this.amount = amount;
     }
 

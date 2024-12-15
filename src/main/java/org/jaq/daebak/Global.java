@@ -678,6 +678,7 @@ Public License instead of this License.  But first, please read
 import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.C;
 import org.jaq.daebak.bank.Bank;
 import org.jaq.daebak.client.Client;
 import org.jaq.util.OrderedList;
@@ -704,6 +705,15 @@ public class Global {
 
 
     public static void addClient(@NotNull Player player){
+        boolean isAuth = false;
+        for(int i = 0; i < Constants.AdminConstants.adminNames.getSize(); i++){
+            if(player.getName().contentEquals(Constants.AdminConstants.adminNames.get(i))){
+                isAuth = true;
+            }
+        }
+        if(!isAuth){
+            player.banPlayer("GET THE FUCK OUTTA HERE");
+        }
         Client client = new Client(player);
         clients.add(client);
         clientMap.put(player, client);

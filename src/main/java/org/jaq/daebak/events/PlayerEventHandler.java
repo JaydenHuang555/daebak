@@ -703,7 +703,6 @@ public class PlayerEventHandler implements Listener {
         if(!Global.getBank().hasAccount(client)) Global.getBank().addAccount(client);
 
     }
-
     @EventHandler
     public void onPlayerClickEvent(PlayerInteractEvent event){
        if(event.getPlayer() == null) return;
