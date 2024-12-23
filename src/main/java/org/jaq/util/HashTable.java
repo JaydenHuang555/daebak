@@ -689,36 +689,34 @@ public class HashTable<K, V> {
     }
 
     public void put(K key, V val){
-        int index = hash(key);
-        if(table[index] == null) table[index] = new Node(key, val);
+        Node node = new Node(key, val);
+        if(table[hash(key)] == null) table[hash(key)] = node;
         else {
-            Node node = table[index];
-            while(node.next != null) node = node.next;
-            node.next = new Node(key, val);
+            Node next = table[hash(key)];
+            int track = 0;
+            while(next.next != null){
+                next = next.next;
+                if(++track == 0xfff) throw new RuntimeException("stuck in an infinite loop!!!!!");
+            }
         }
     }
 
+
+    @SuppressWarnings("unchecked")
     public V get(K key){
-        int index = hash(key);
-        if(!contains(key)) throw new RuntimeException("error");
-        Node node = table[index];
-        while(node.next != null){
-            if(node.key == key) return (V)node.val;
-            node = node.next;
+        if(!contains(key)) throw new RuntimeException("given key is not present in map");
+        Node node = table[hash(key)];
+        while(node != null){
+            if(node.key.hashCode() == key.hashCode()) return (V)node.val;
         }
-        throw new ItemNotFoundException();
+        throw new RuntimeException("contains method does not work");
     }
 
-    public V tryToGet(K key){
-        try {
-            return get(key);
-        } catch (Exception e){
-            return null;
-        }
-    }
 
     public boolean contains(K key){
-        return table[hash(key)] != null;
+        Node next = table[hash(key)];
+        while(next != null) if(next.key.hashCode() == key.hashCode()) return true;
+        return false;
     }
 
 }
